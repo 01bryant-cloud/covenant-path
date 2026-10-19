@@ -59,7 +59,7 @@ button,input,textarea,select{font:inherit;color:inherit}
 .ey{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;opacity:.85;margin-bottom:4px}
 .hd h1{font-size:clamp(1.7rem,6vw,2.2rem);line-height:1.1;color:#fff}
 .hd .sub{margin-top:6px;font-size:.9rem;opacity:.9}
-.hd img{width:64px;height:62px;flex:none;display:block;transform:translate(6px,2px)}
+.hd img{width:64px;height:62px;flex:none;display:block}
 main{padding-block:26px 48px;display:flex;flex-direction:column;gap:26px}
 section{display:flex;flex-direction:column;gap:12px}
 .sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -165,7 +165,7 @@ label.f textarea{min-height:84px;resize:vertical}
 </style>
 
 <div id="app" class="gutter"><div class="wrap lock" id="lock">
-  <svg class="logo" viewBox="170 80 870 1030" fill="none" stroke="currentColor" stroke-width="28" stroke-linejoin="round" aria-hidden="true"><path d="M605 100 L520 400 V1080 H690 V400 Z"/><path d="M560 560 H650 V660 H560 Z M560 760 H650 V1080 H560 Z"/><path d="M330 600 V1080 M400 480 V1080 M460 560 V1080 M250 700 V1080 M190 1080 H1040 M760 560 V1080 M830 480 V1080 M900 650 V1080 M960 720 V1080"/></svg>
+  <svg xmlns="http://www.w3.org/2000/svg" class="logo" viewBox="170 80 870 1030" fill="none" stroke="currentColor" stroke-width="18" stroke-linejoin="round" aria-hidden="true"><path d="M192 893 L236 849 L236 1088 L192 1088 Z"/><path d="M275 725 L320 684 L320 1088 L275 1088 Z"/><path d="M360 575 L404 524 L404 1088 L360 1088 Z"/><path d="M445 428 L482 383 L530 102 L582 382 L621 430 L621 1088 L555 1088 L555 983 L509 983 L509 1088 L445 1088 Z"/><path d="M509 492 L533 457 L555 490 L555 667 L509 667 Z"/><path d="M509 725 L555 725 L555 932 L509 932 Z"/><path d="M661 538 L706 580 L706 670 L878 770 L917 498 L941 718 L967 743 L967 798 L1021 827 L1021 1088 L970 1088 L967 895 L957 880 L944 895 L944 1088 L867 1088 L864 860 L848 840 L832 860 L832 1088 L747 1088 L745 817 L729 790 L709 820 L709 1088 L661 1088 Z"/></svg>
   <h1>My Covenant Path</h1>
   <p id="lockmsg">Enter the six-digit code from your bishop to open your goal sheet.</p>
   <input class="pin" id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" aria-label="Six-digit code" placeholder="••••••">
@@ -251,7 +251,7 @@ if(blobFromHash()){try{sessionStorage.setItem("cp:blob",blobFromHash())}catch(_)
 setTimeout(()=>$("#pin").focus(),100);
 
 /* ---------- render ---------- */
-const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="170 80 870 1030" fill="none" stroke="#fff" stroke-width="28" stroke-linejoin="round"><path d="M605 100 L520 400 V1080 H690 V400 Z"/><path d="M560 560 H650 V660 H560 Z M560 760 H650 V1080 H560 Z"/><path d="M330 600 V1080 M400 480 V1080 M460 560 V1080 M250 700 V1080 M190 1080 H1040 M760 560 V1080 M830 480 V1080 M900 650 V1080 M960 720 V1080"/></svg>')+'">';
+const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="92" viewBox="170 80 870 1030" fill="none" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" aria-hidden="true"><path d="M192 893 L236 849 L236 1088 L192 1088 Z"/><path d="M275 725 L320 684 L320 1088 L275 1088 Z"/><path d="M360 575 L404 524 L404 1088 L360 1088 Z"/><path d="M445 428 L482 383 L530 102 L582 382 L621 430 L621 1088 L555 1088 L555 983 L509 983 L509 1088 L445 1088 Z"/><path d="M509 492 L533 457 L555 490 L555 667 L509 667 Z"/><path d="M509 725 L555 725 L555 932 L509 932 Z"/><path d="M661 538 L706 580 L706 670 L878 770 L917 498 L941 718 L967 743 L967 798 L1021 827 L1021 1088 L970 1088 L967 895 L957 880 L944 895 L944 1088 L867 1088 L864 860 L848 840 L832 860 L832 1088 L747 1088 L745 817 L729 790 L709 820 L709 1088 L661 1088 Z"/></svg>')+'">';
 function render(){
   const v=view(),ym=v.org==="YM";document.documentElement.classList.toggle("yw",!ym);document.documentElement.classList.toggle("ym",ym);
   const first=v.first||"";
