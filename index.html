@@ -277,7 +277,7 @@ function render(){
   const quotes=[["endowment","About my temple endowment goal",((v.ords||{}).endowment||{}).comment],["sealing","About my temple sealing goal",((v.ords||{}).sealing||{}).comment],["pb","About my patriarchal blessing",(v.pb||{}).comment]]
     .map(([k,l,c])=>'<button class="tap qc'+(c?' has':'')+'" data-edit="'+k+'"><span>'+l+'</span>'+(c?'<em>“'+esc(c)+'”</em>':'<div class="empty">Tap to add a line in your own words</div>')+'</button>').join("");
   const pb=v.pb||{};const pbv=pb.status==="received"?"Received":pb.target?"My goal: "+fmtMY(pb.target):"No goal yet";
-  const pbn=pb.status==="received"?"":pb.target?"Ask the bishop for a recommend":"Tap to set a goal date";
+  const pbn=pb.status==="received"?"":pb.target?"":"Tap to set a goal date";
   const rec=v.recExp?(v.recExp<today()?["Expired "+fmt(v.recExp),"Schedule a recommend interview"]:["Current through "+fmt(v.recExp),""]):["Not yet",""];
   const mis=v.mission||{};const misv=mis.answer==="yes"?(mis.date?"Planned start "+fmtMY(mis.date):"Yes"):mis.answer==="no"?"Not at this time":"Tap to answer";
   const along='<div class="boxes">'+
