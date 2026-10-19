@@ -195,7 +195,7 @@ async function sealWith(key,obj){const iv=crypto.getRandomValues(new Uint8Array(
 async function openWith(key,b64){const u=b64d(b64);const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:u.slice(0,12)},key,u.slice(12));return JSON.parse(new TextDecoder().decode(new Uint8Array(pt)))}
 
 /* ---------- bishop's inbox (Google Form) ---------- */
-const FORM={url:"",fields:{}}; /* filled in once the bishop's form exists */
+const FORM={url:"https://docs.google.com/forms/d/e/1FAIpQLSf8Qep98XsrqNv8GjmP4NRY8uRNK7GK_-J7J__zKoe11JwEhA/formResponse",fields:{youth:"entry.1631065746",area:"entry.2056752160",date:"entry.93821424",comment:"entry.319160877",text:"entry.836405964"}};
 function formReady(){return !!(FORM.url&&FORM.fields.youth)}
 async function sendToForm(rows){if(!formReady())return false;const v=S.base;
   try{for(const r of rows){const body=new URLSearchParams();body.set(FORM.fields.youth,(v.first||"")+" "+(v.last||"")+" ["+(v.id||"")+"]");
