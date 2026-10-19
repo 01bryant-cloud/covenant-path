@@ -268,12 +268,25 @@ setTimeout(()=>$("#pin").focus(),100);
 
 /* ---------- music ---------- */
 const TRACKS=[["Come Thou Fount","music/t1.mp3"],["Jesus Once of Humble Birth","music/t2.mp3"],["Be Still My Soul","music/t3.mp3"],["A New Day","music/t4.mp3"],["I Know That My Redeemer Lives","music/t5.mp3"],["How Great Thou Art","music/t6.mp3"],["Amazing Grace","music/t7.mp3"]];
-const M={order:[],i:0,playing:false,el:null};
-function musicInit(){if(M.el)return;M.order=TRACKS.map((_,i)=>i);for(let i=M.order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[M.order[i],M.order[j]]=[M.order[j],M.order[i]]}M.el=document.createElement("audio");M.el.preload="none";M.el.addEventListener("ended",()=>musicNext(true));M.el.addEventListener("play",()=>{M.playing=true;musicPaint()});M.el.addEventListener("pause",()=>{M.playing=false;musicPaint()});document.body.appendChild(M.el);musicLoad()}
-function musicLoad(){const t=TRACKS[M.order[M.i]];M.el.src=t[1];if("mediaSession" in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t[0],artist:"William Joseph",album:"My Covenant Path"});navigator.mediaSession.setActionHandler("nexttrack",()=>musicNext(true));navigator.mediaSession.setActionHandler("play",()=>M.el.play());navigator.mediaSession.setActionHandler("pause",()=>M.el.pause())}catch(_){}}}
-function musicToggle(){musicInit();if(M.el.paused)M.el.play().catch(()=>toast("Tap play again to start the music."));else M.el.pause()}
-function musicNext(auto){musicInit();M.i=(M.i+1)%M.order.length;musicLoad();musicPaint();if(auto||M.playing)M.el.play().catch(()=>{})}
-function musicBar(){musicInit();const t=TRACKS[M.order[M.i]];
+const M={order:[],i:0,playing:false,els:null,cur:0,started:false};
+/* two players unlocked by the first tap, used in turn, so each next song starts from an already-unlocked player (iPhone rule) */
+const SILENT="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YQAAAAA=";
+function musicInit(){if(M.els)return;M.order=TRACKS.map((_,i)=>i);for(let i=M.order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[M.order[i],M.order[j]]=[M.order[j],M.order[i]]}
+  M.els=[new Audio(),new Audio()];M.els.forEach(a=>{a.preload="auto";a.addEventListener("ended",()=>{if(a===M.els[M.cur])musicNext(true)});a.addEventListener("play",()=>{if(a===M.els[M.cur]){M.playing=true;musicPaint()}});a.addEventListener("pause",()=>{if(a===M.els[M.cur]&&!a.ended){M.playing=false;musicPaint()}});document.body.appendChild(a)})}
+function trackAt(k){return TRACKS[M.order[(k+M.order.length)%M.order.length]]}
+function musicMeta(){const t=trackAt(M.i);if("mediaSession" in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t[0],artist:"William Joseph",album:"My Covenant Path"});navigator.mediaSession.setActionHandler("nexttrack",()=>musicNext(true));navigator.mediaSession.setActionHandler("play",()=>M.els[M.cur].play());navigator.mediaSession.setActionHandler("pause",()=>M.els[M.cur].pause())}catch(_){}}}
+function musicPreloadNext(){const nx=M.els[1-M.cur];const t=trackAt(M.i+1);if(nx.dataset.src!==t[1]){nx.src=t[1];nx.dataset.src=t[1];nx.load()}}
+function musicToggle(){musicInit();const a=M.els[M.cur];
+  if(!M.started){M.started=true;const o=M.els[1-M.cur];o.src=SILENT;o.play().then(()=>o.pause()).catch(()=>{});
+    a.src=trackAt(M.i)[1];a.dataset.src=a.src;musicMeta();a.play().then(()=>{setTimeout(musicPreloadNext,1500)}).catch(()=>toast("Tap play again to start the music."));return}
+  if(a.paused)a.play().catch(()=>toast("Tap play again to start the music."));else a.pause()}
+function musicNext(auto){musicInit();if(!M.started){M.i=(M.i+1)%M.order.length;musicPaint();return}
+  const was=M.els[M.cur];const wasPlaying=auto||!was.paused;was.pause();
+  M.i=(M.i+1)%M.order.length;M.cur=1-M.cur;const a=M.els[M.cur];const t=trackAt(M.i);
+  if(a.dataset.src!==t[1]){a.src=t[1];a.dataset.src=t[1]}
+  musicMeta();musicPaint();
+  if(wasPlaying){a.currentTime=0;a.play().then(()=>{setTimeout(musicPreloadNext,1500)}).catch(()=>{M.playing=false;musicPaint();toast("Tap play to continue the music.")})}}
+function musicBar(){musicInit();const t=trackAt(M.i);
   const play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',pause='<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>',next='<svg viewBox="0 0 24 24"><path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/></svg>';
   return '<div class="music" id="music"><span class="mt">'+(M.playing?'Now playing · <b>'+esc(t[0])+'</b>':'Music while you work · <b>'+esc(t[0])+'</b>')+'</span><button type="button" class="play" data-m="toggle" aria-label="'+(M.playing?'Pause':'Play')+'">'+(M.playing?pause:play)+'</button><button type="button" data-m="next" aria-label="Next song">'+next+'</button></div>'}
 function musicPaint(){const old=$("#music");if(old)old.outerHTML=musicBar()}
