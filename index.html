@@ -116,6 +116,14 @@ section{display:flex;flex-direction:column;gap:12px}
 .men{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .men span{border:1.5px solid var(--pn);background:color-mix(in srgb,var(--pn) 10%,var(--surface));color:var(--pn);border-radius:10px;padding:8px;font-size:.88rem;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;min-height:40px}
 .men span.wr{background:none;border:1.5px dashed var(--line)}
+/* music */
+.music{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 14px;background:var(--surface);margin-top:-6px}
+.music .mt{flex:1;min-width:0;font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.music .mt b{color:var(--ink);font-weight:600}
+.music button{all:unset;cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--pn);background:var(--sunk)}
+.music button:focus-visible{outline:2px solid var(--pn)}
+.music button.play{background:var(--band);color:#fff}
+.music svg{width:16px;height:16px;fill:currentColor}
 /* done bar */
 .donebar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
 .donebar .wrap{display:flex;align-items:center;gap:12px}
@@ -258,6 +266,19 @@ setTimeout(()=>$("#pin").focus(),100);
   catch(e){if(!cached){$("#lockmsg").textContent=e&&e.message==="nokey"?"This link isn't active yet. Ask your bishop for a new one.":"Couldn't load your sheet. Check your connection and reopen the link.";$("#pin").hidden=true;$("#unlock").hidden=true}}
 })();
 
+/* ---------- music ---------- */
+const TRACKS=[["Come Thou Fount","music/t1.mp3"],["Jesus Once of Humble Birth","music/t2.mp3"],["Be Still My Soul","music/t3.mp3"],["A New Day","music/t4.mp3"],["I Know That My Redeemer Lives","music/t5.mp3"],["How Great Thou Art","music/t6.mp3"],["Amazing Grace","music/t7.mp3"]];
+const M={order:[],i:0,playing:false,el:null};
+function musicInit(){if(M.el)return;M.order=TRACKS.map((_,i)=>i);for(let i=M.order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[M.order[i],M.order[j]]=[M.order[j],M.order[i]]}M.el=document.createElement("audio");M.el.preload="none";M.el.addEventListener("ended",()=>musicNext(true));M.el.addEventListener("play",()=>{M.playing=true;musicPaint()});M.el.addEventListener("pause",()=>{M.playing=false;musicPaint()});document.body.appendChild(M.el);musicLoad()}
+function musicLoad(){const t=TRACKS[M.order[M.i]];M.el.src=t[1];if("mediaSession" in navigator){try{navigator.mediaSession.metadata=new MediaMetadata({title:t[0],artist:"William Joseph",album:"My Covenant Path"});navigator.mediaSession.setActionHandler("nexttrack",()=>musicNext(true));navigator.mediaSession.setActionHandler("play",()=>M.el.play());navigator.mediaSession.setActionHandler("pause",()=>M.el.pause())}catch(_){}}}
+function musicToggle(){musicInit();if(M.el.paused)M.el.play().catch(()=>toast("Tap play again to start the music."));else M.el.pause()}
+function musicNext(auto){musicInit();M.i=(M.i+1)%M.order.length;musicLoad();musicPaint();if(auto||M.playing)M.el.play().catch(()=>{})}
+function musicBar(){musicInit();const t=TRACKS[M.order[M.i]];
+  const play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>',pause='<svg viewBox="0 0 24 24"><path d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>',next='<svg viewBox="0 0 24 24"><path d="M6 6l8.5 6L6 18zM16 6h2v12h-2z"/></svg>';
+  return '<div class="music" id="music"><span class="mt">'+(M.playing?'Now playing · <b>'+esc(t[0])+'</b>':'Music while you work · <b>'+esc(t[0])+'</b>')+'</span><button type="button" class="play" data-m="toggle" aria-label="'+(M.playing?'Pause':'Play')+'">'+(M.playing?pause:play)+'</button><button type="button" data-m="next" aria-label="Next song">'+next+'</button></div>'}
+function musicPaint(){const old=$("#music");if(old)old.outerHTML=musicBar()}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b)return;if(b.dataset.m==="toggle")musicToggle();else musicNext(false)});
+
 /* ---------- render ---------- */
 const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="92" viewBox="170 80 870 1030" fill="none" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" aria-hidden="true"><path d="M192 893 L236 849 L236 1088 L192 1088 Z"/><path d="M275 725 L320 684 L320 1088 L275 1088 Z"/><path d="M360 575 L404 524 L404 1088 L360 1088 Z"/><path d="M445 428 L482 383 L530 102 L582 382 L621 430 L621 1088 L555 1088 L555 983 L509 983 L509 1088 L445 1088 Z"/><path d="M509 492 L533 457 L555 490 L555 667 L509 667 Z"/><path d="M509 725 L555 725 L555 932 L509 932 Z"/><path d="M661 538 L706 580 L706 670 L878 770 L917 498 L941 718 L967 743 L967 798 L1021 827 L1021 1088 L970 1088 L967 895 L957 880 L944 895 L944 1088 L867 1088 L864 860 L848 840 L832 860 L832 1088 L747 1088 L745 817 L729 790 L709 820 L709 1088 L661 1088 Z"/></svg>')+'">';
 function render(){
@@ -292,7 +313,7 @@ function render(){
   const men=(v.mentors||[]).slice(0,5);while(men.length<5)men.push("");
   const pend=pendingCount();
   $("#app").innerHTML='<header class="hd"><div class="wrap"><div class="t"><div class="ey">My Covenant Path</div><h1>'+esc((v.first||"")+" "+(v.last||""))+'</h1><div class="sub">'+(ym?"Young Men":"Young Women")+(v.group?' · '+esc(v.group):'')+'</div></div>'+TEMPLE+'</div></header>'+
-   '<main class="wrap">'+
+   '<main class="wrap">'+musicBar()+
    '<section><div class="sh"><h2>My Covenant Path</h2><div class="q">“Every sincere seeker of Jesus Christ will find Him in the temple.”<b>President Nelson</b></div></div>'+path+quotes+'</section>'+
    '<section><div class="sh"><h2>Along the Way</h2></div>'+along+'</section>'+
    '<section><div class="sh"><h2>Wisdom and Stature</h2><div class="q">“And Jesus increased in wisdom and stature, and in favour with God and man.”<b>Luke 2:52</b></div></div><p class="lead">Tap a goal to change it, or add a new one.</p>'+areas+'</section>'+
