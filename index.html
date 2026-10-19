@@ -309,6 +309,7 @@ function render(){
     path+='<'+tag+' class="st'+(can?' tap':'')+(got?' got':goal?' goal':'')+(tmp?' tmp':'')+'"'+(can?' data-edit="'+k+'"':'')+'><span class="dot">'+(got?'✓':i+1)+'</span><span class="sn">'+l+(can&&changed(k)?'<span class="chip">New</span>':'')+'</span><span class="ss">'+(l1?'<b>'+l1+'</b>':'')+esc(l2)+'</span></'+tag+'>'});
   path+='</div>';
   const quotes=[["endowment","About my temple endowment goal",((v.ords||{}).endowment||{}).comment],["sealing","About my temple sealing goal",((v.ords||{}).sealing||{}).comment],["pb","About my patriarchal blessing",(v.pb||{}).comment]]
+    .filter(([k,l,c])=>{const st=k==="pb"?(v.pb||{}):((v.ords||{})[k]||{});if(st.status==="received")return false;const set=k==="sealing"?!!st.answer:k==="pb"?!!st.target:!!st.target;return c||!set})
     .map(([k,l,c])=>'<button class="tap qc'+(c?' has':'')+'" data-edit="'+k+'"><span>'+l+'</span>'+(c?'<em>“'+esc(c)+'”</em>':'<div class="empty">Tap to add a line in your own words</div>')+'</button>').join("");
   const pb=v.pb||{};const pbv=pb.status==="received"?"Received":pb.target?"My goal: "+fmtMY(pb.target):"No goal yet";
   const pbn=pb.status==="received"?"":pb.target?"":"Tap to set a goal date";
