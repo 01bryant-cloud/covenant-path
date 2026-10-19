@@ -207,7 +207,16 @@ async function sendToForm(rows){if(!formReady())return false;const v=S.base;
 const S={base:null,key:null,edits:null,pin:""};
 let fails=0;
 function blobFromHash(){const h=(location.hash||"").slice(1);return /^[A-Za-z0-9_-]{40,}$/.test(h)?h:""}
-function storeKey(){return "cp:"+S.base.id}
+const LINKS_SHEET="11BGwskVDFDWPb_xNmYs_RrCus45RJv4WdvZu2TGTWZU";
+function keyFromHash(){const h=(location.hash||"").slice(1);return /^[a-z0-9]{8,16}$/i.test(h)?h:""}
+let fetchedBlob="";
+async function fetchBlob(key){
+  const url="https://docs.google.com/spreadsheets/d/"+LINKS_SHEET+"/gviz/tq?tqx=out:json&sheet=Links&tq="+encodeURIComponent("select B where A = '"+key.replace(/'/g,"")+"'");
+  const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw new Error("http "+r.status);
+  const t=await r.text();const m=t.match(/setResponse\((\{[\s\S]*\})\);?\s*$/);if(!m)throw new Error("shape");
+  const j=JSON.parse(m[1]);const rows=(j.table&&j.table.rows)||[];const v=rows.length&&rows[0].c&&rows[0].c[0]&&rows[0].c[0].v;
+  if(!v)throw new Error("nokey");return String(v)}
+function storeKey(){return "cp:"+(keyFromHash()||S.base.id)}
 async function loadEdits(){try{const b=localStorage.getItem(storeKey());if(!b)return {items:{},goals:{},sentAt:""};return await openWith(S.key,b)}catch(_){return {items:{},goals:{},sentAt:""}}}
 async function saveEdits(){try{localStorage.setItem(storeKey(),await sealWith(S.key,S.edits))}catch(_){toast("Couldn't keep this on your phone. It will still be in your message.",4000)}}
 /* merged view: base data + youth's edits */
@@ -227,8 +236,8 @@ function pendingCount(){let n=0;Object.values(S.edits.items||{}).forEach(x=>{if(
 /* ---------- lock screen ---------- */
 async function tryUnlock(){
   const pin=$("#pin").value.trim();if(!/^\d{6}$/.test(pin)){$("#pinerr").textContent="Enter all six digits.";return}
-  const blob=blobFromHash()||sessionStorage.getItem("cp:blob")||"";
-  if(!blob){$("#pinerr").textContent="";$("#paste").hidden=false;$("#lockmsg").textContent="This link didn't carry your goal sheet. Paste the full link from your bishop below.";return}
+  const blob=fetchedBlob||blobFromHash()||sessionStorage.getItem("cp:blob")||"";
+  if(!blob){$("#pinerr").textContent="Your sheet hasn't loaded yet. Check your connection and try again.";return}
   $("#unlock").disabled=true;$("#pinerr").textContent="Opening…";
   try{const {data,key}=await openBlob(blob,pin);S.base=data;S.key=key;S.pin=pin;S.edits=await loadEdits();fails=0;render()}
   catch(e){fails++;const wait=Math.min(30,2**fails)*1000;
@@ -242,6 +251,12 @@ $("#usepaste").addEventListener("click",()=>{const m=$("#pastebox").value.match(
   try{sessionStorage.setItem("cp:blob",m[1])}catch(_){}$("#paste").hidden=true;$("#lockmsg").textContent="Now enter your six-digit code.";$("#pin").focus()});
 if(blobFromHash()){try{sessionStorage.setItem("cp:blob",blobFromHash())}catch(_){}}
 setTimeout(()=>$("#pin").focus(),100);
+(async()=>{const key=keyFromHash();if(!key)return;
+  let cached="";try{cached=localStorage.getItem("cp:blob:"+key)||""}catch(_){}
+  if(cached)fetchedBlob=cached;
+  try{const b=await fetchBlob(key);fetchedBlob=b;try{localStorage.setItem("cp:blob:"+key,b)}catch(_){}}
+  catch(e){if(!cached){$("#lockmsg").textContent=e&&e.message==="nokey"?"This link isn't active yet. Ask your bishop for a new one.":"Couldn't load your sheet. Check your connection and reopen the link.";$("#pin").hidden=true;$("#unlock").hidden=true}}
+})();
 
 /* ---------- render ---------- */
 const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="92" viewBox="170 80 870 1030" fill="none" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" aria-hidden="true"><path d="M192 893 L236 849 L236 1088 L192 1088 Z"/><path d="M275 725 L320 684 L320 1088 L275 1088 Z"/><path d="M360 575 L404 524 L404 1088 L360 1088 Z"/><path d="M445 428 L482 383 L530 102 L582 382 L621 430 L621 1088 L555 1088 L555 983 L509 983 L509 1088 L445 1088 Z"/><path d="M509 492 L533 457 L555 490 L555 667 L509 667 Z"/><path d="M509 725 L555 725 L555 932 L509 932 Z"/><path d="M661 538 L706 580 L706 670 L878 770 L917 498 L941 718 L967 743 L967 798 L1021 827 L1021 1088 L970 1088 L967 895 L957 880 L944 895 L944 1088 L867 1088 L864 860 L848 840 L832 860 L832 1088 L747 1088 L745 817 L729 790 L709 820 L709 1088 L661 1088 Z"/></svg>')+'">';
