@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>My Covenant Path</title>
+<style>
+/* Layout: one column, phone-first, mirroring the printed goal sheet: header band, temple path, quote cards, Along the Way, four area cards, mentors. */
+@font-face{font-family:"PSOpen";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/os-400.ttf") format("truetype")}
+@font-face{font-family:"PSOpen";font-weight:400;font-style:italic;font-display:swap;src:url("fonts/os-400i.ttf") format("truetype")}
+@font-face{font-family:"PSOpen";font-weight:600;font-style:normal;font-display:swap;src:url("fonts/os-600.ttf") format("truetype")}
+@font-face{font-family:"PSOpen";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/os-700.ttf") format("truetype")}
+@font-face{font-family:"PSBask";font-weight:400;font-style:normal;font-display:swap;src:url("fonts/lb-400.ttf") format("truetype")}
+@font-face{font-family:"PSBask";font-weight:400;font-style:italic;font-display:swap;src:url("fonts/lb-400i.ttf") format("truetype")}
+@font-face{font-family:"PSBask";font-weight:700;font-style:normal;font-display:swap;src:url("fonts/lb-700.ttf") format("truetype")}
+:root{
+  --bg:#ffffff; --surface:#ffffff; --sunk:#f6f5f3; --ink:#1f2a37; --muted:#5d6875; --line:#d9dee5;
+  --pn:#1e3a5f; --band:#1e3a5f; --band2:#a8874c; --gold:#a8874c; --goldl:#efe6d4; --quote:#faf7f1; --quote-ink:#3a3326;
+  --sp:#2e6da4; --in:#c46a1c; --so:#4a8a3b; --ph:#c2497a;
+  --good:#2b7a4b; --warn:#a8670f; --warn-soft:#fdf5e8; --crit:#b23838;
+  --f-display:"PSBask","Libre Baskerville",Georgia,serif; --f-body:"PSOpen","Open Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:10px; --shadow:0 2px 12px rgba(20,30,40,.08);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#15191f; --surface:#1d2229; --sunk:#262c34; --ink:#eef1f4; --muted:#a3abb5; --line:#343b45;
+  --pn:#9db7d2; --goldl:#4a4030; --quote:#262219; --quote-ink:#e9e1d1; --warn-soft:#3a2f1c;
+  --sp:#6ea3d6; --in:#e39a56; --so:#7fb871; --ph:#e07fa8; --good:#6fc08f; --warn:#e0a24a; --crit:#e07070; --shadow:0 2px 12px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#15191f; --surface:#1d2229; --sunk:#262c34; --ink:#eef1f4; --muted:#a3abb5; --line:#343b45;
+  --pn:#9db7d2; --goldl:#4a4030; --quote:#262219; --quote-ink:#e9e1d1; --warn-soft:#3a2f1c;
+  --sp:#6ea3d6; --in:#e39a56; --so:#7fb871; --ph:#e07fa8; --good:#6fc08f; --warn:#e0a24a; --crit:#e07070; --shadow:0 2px 12px rgba(0,0,0,.4); color-scheme:dark}
+:root.yw{--band:#bb3d62;--band2:#e8909f}
+:root.ym{--band:#2f6685;--band2:#a8874c}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--band)}
+h1,h2,h3{margin:0;font-family:var(--f-display);font-weight:400;text-wrap:balance}
+button,input,textarea,select{font:inherit;color:inherit}
+.gutter{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:720px;margin:0 auto}
+/* header band */
+.hd{background:var(--band);color:#fff;padding-block:22px 18px;position:relative}
+.hd:after{content:"";position:absolute;left:0;right:0;bottom:-6px;height:6px;background:var(--band2)}
+.hd .wrap{display:flex;align-items:flex-end;gap:16px}
+.hd .t{flex:1;min-width:0;overflow-wrap:anywhere}
+.ey{font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;opacity:.85;margin-bottom:4px}
+.hd h1{font-size:clamp(1.7rem,6vw,2.2rem);line-height:1.1;color:#fff}
+.hd .sub{margin-top:6px;font-size:.9rem;opacity:.9}
+.hd img{width:64px;height:62px;flex:none;display:block;transform:translate(6px,2px)}
+main{padding-block:26px 48px;display:flex;flex-direction:column;gap:26px}
+section{display:flex;flex-direction:column;gap:12px}
+.sh{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sh h2{font-size:1.25rem;font-weight:700;color:var(--pn);min-width:0}
+.sh .q{font-size:.8rem;font-style:italic;color:var(--muted);text-align:right;flex:1 1 220px;min-width:0}
+.sh .q b{font-style:normal;font-weight:600;font-size:.72rem;margin-left:6px}
+.lead{font-size:.9rem;color:var(--muted);margin:-4px 0 0;font-style:italic}
+/* tappable blocks */
+.tap{all:unset;box-sizing:border-box;display:block;width:100%;cursor:pointer;border-radius:var(--r);text-align:left;position:relative}
+.tap:focus-visible{outline:2px solid var(--pn);outline-offset:2px}
+.tap:after{content:"";position:absolute;right:12px;top:12px;width:18px;height:18px;border-radius:50%;background:var(--sunk);
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235d6875' stroke-width='2.2' stroke-linecap='round'><path d='M12 5v14M5 12h14'/></svg>");background-size:11px;background-repeat:no-repeat;background-position:center}
+.tap.has:after{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235d6875' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 20h4l10-10-4-4L4 16z'/></svg>")}
+/* temple path */
+.path{display:grid;grid-template-columns:repeat(var(--n,4),minmax(0,1fr));gap:4px;position:relative;padding-top:4px}
+.path:before{content:"";position:absolute;top:22px;left:calc(100%/var(--n)/2);right:calc(100%/var(--n)/2);height:2px;background:linear-gradient(90deg,var(--pn),var(--gold))}
+.st{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:0 2px 8px;border-radius:var(--r);min-width:0}
+.st.tap:after{display:none}
+.st.tap:hover{background:var(--sunk)}
+.dot{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:2px dashed var(--line);color:var(--muted);font-weight:700;position:relative;z-index:1;font-size:.95rem}
+.st.got .dot{background:var(--pn);border:2px solid var(--pn);color:#fff}
+.st.goal .dot{border:2.5px solid var(--gold);color:var(--gold)}
+.st.tmp.goal .dot,.st.tmp.got .dot{box-shadow:0 0 0 4px var(--goldl)}
+.st.tmp.got .dot{background:var(--gold);border-color:var(--gold)}
+.sn{font-weight:700;font-size:.82rem;line-height:1.2;hyphens:auto}
+@media (max-width:430px){.sn{font-size:.72rem}.ss{font-size:.74rem}}
+.ss{font-size:.78rem;color:var(--muted);line-height:1.3}
+.ss b{display:block;color:var(--gold);font-weight:700}
+.st.got .ss b{color:var(--muted);font-weight:600}
+/* quote cards */
+.qc{border-left:3px solid var(--gold);background:var(--quote);padding:10px 40px 10px 14px;color:var(--quote-ink)}
+.qc span{display:block;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;font-family:var(--f-body)}
+.qc em{font-family:var(--f-display);font-style:italic;font-size:1rem}
+.qc .empty{font-style:italic;color:var(--muted);font-size:.9rem}
+/* along the way */
+.boxes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:480px){.boxes{grid-template-columns:1fr}}
+.box{border:1px solid var(--line);border-radius:var(--r);padding:12px 40px 12px 14px;background:var(--surface)}
+.box .k{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.box .v{font-family:var(--f-display);font-size:1.05rem;color:var(--pn);margin-top:3px}
+.box .n{font-size:.82rem;color:var(--muted);margin-top:2px}
+/* area cards */
+.areas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+@media (max-width:560px){.areas{grid-template-columns:1fr}}
+.area{border:1px solid var(--line);border-top:4px solid var(--c);border-radius:var(--r);padding:12px 14px 10px;background:var(--surface);display:flex;flex-direction:column;gap:8px}
+.area .t{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.area .t b{font-family:var(--f-display);font-size:1.05rem;color:var(--c)}
+.area .t i{font-size:.78rem;color:var(--muted)}
+.area ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+.g{all:unset;box-sizing:border-box;display:flex;gap:10px;align-items:flex-start;width:100%;padding:7px 6px;border-radius:8px;cursor:pointer;font-size:.95rem;line-height:1.35}
+.g:hover{background:var(--sunk)}
+.g:focus-visible{outline:2px solid var(--c);outline-offset:1px}
+.g:before{content:"";flex:none;width:14px;height:14px;border:1.5px solid var(--c);border-radius:3px;margin-top:4px}
+.g.done{color:var(--muted);text-decoration:line-through}
+.g.done:before{background:var(--c);box-shadow:inset 0 0 0 2px var(--surface)}
+.g .d{display:block;font-size:.78rem;color:var(--muted);text-decoration:none}
+.add{all:unset;box-sizing:border-box;cursor:pointer;font-size:.85rem;font-weight:600;color:var(--c);padding:6px;border-radius:8px}
+.add:hover{background:var(--sunk)} .add:focus-visible{outline:2px solid var(--c)}
+.chip{display:inline-block;font-size:.7rem;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--warn-soft);color:var(--warn);margin-left:6px;vertical-align:middle;text-decoration:none}
+/* mentors */
+.men{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.men span{border:1.5px solid var(--pn);background:color-mix(in srgb,var(--pn) 10%,var(--surface));color:var(--pn);border-radius:10px;padding:8px;font-size:.88rem;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;min-height:40px}
+.men span.wr{background:none;border:1.5px dashed var(--line)}
+/* done bar */
+.donebar{position:sticky;bottom:0;background:var(--surface);border-top:1px solid var(--line);padding-block:10px calc(10px + env(safe-area-inset-bottom,0px));z-index:5}
+.donebar .wrap{display:flex;align-items:center;gap:12px}
+.donebar p{margin:0;flex:1;font-size:.85rem;color:var(--muted);min-width:0}
+.btn{border:1px solid var(--line);background:var(--surface);padding:9px 16px;border-radius:9px;cursor:pointer;font-weight:600;font-size:.92rem;white-space:nowrap;text-decoration:none;display:inline-block}
+.btn.primary{background:var(--band);border-color:var(--band);color:#fff}
+.btn.ghost{border-color:transparent;color:var(--muted)}
+.btn:focus-visible{outline:2px solid var(--pn);outline-offset:2px}
+.btn[disabled]{opacity:.5;cursor:default}
+/* lock screen */
+.lock{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding-block:40px;text-align:center}
+.lock .logo{width:72px;height:70px;color:var(--pn)}
+.lock h1{font-size:1.6rem;color:var(--pn)}
+.lock p{margin:0;max-width:34ch;color:var(--muted)}
+.pin{font-size:1.9rem;letter-spacing:.55em;text-align:center;width:10.5ch;padding:8px 0 8px .55em;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);font-variant-numeric:tabular-nums}
+.pin:focus{outline:2px solid var(--pn);outline-offset:2px}
+.err{color:var(--crit);font-size:.9rem;min-height:1.3em}
+.paste{display:flex;flex-direction:column;gap:8px;width:100%;max-width:420px}
+.paste textarea{width:100%;min-height:80px;border:1px solid var(--line);border-radius:10px;padding:8px;background:var(--surface);font-size:.85rem}
+/* sheet (modal) */
+.ov{position:fixed;inset:0;background:rgba(18,28,44,.55);z-index:20;display:flex;align-items:flex-end;justify-content:center}
+@media (min-width:600px){.ov{align-items:center}}
+.sheet{background:var(--surface);color:var(--ink);width:100%;max-width:560px;border-radius:16px 16px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow);max-height:92vh;overflow:auto}
+@media (min-width:600px){.sheet{border-radius:16px;padding:22px}}
+.sheet h3{font-family:var(--f-display);font-weight:700;font-size:1.15rem;color:var(--pn)}
+.sheet .hint{font-size:.85rem;color:var(--muted);margin:-8px 0 0}
+label.f{display:flex;flex-direction:column;gap:5px;font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+label.f input,label.f textarea,label.f select{text-transform:none;letter-spacing:0;font-weight:400;font-size:1rem;border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:var(--surface);width:100%;min-width:0}
+label.f textarea{min-height:84px;resize:vertical}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;overflow:hidden;align-self:flex-start}
+.seg button{border:0;background:none;padding:8px 18px;cursor:pointer;color:var(--muted);font-weight:600}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--pn);color:#fff}
+.acts{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.acts .left{margin-right:auto}
+.note{font-size:.82rem;color:var(--muted)}
+.msg{white-space:pre-wrap;background:var(--sunk);border-radius:10px;padding:12px;font-size:.9rem;line-height:1.45;max-height:40vh;overflow:auto;user-select:all}
+#toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:999px;font-size:.9rem;z-index:15;box-shadow:var(--shadow);max-width:calc(100% - 32px);text-align:center}
+@media (prefers-reduced-motion:no-preference){.sheet{animation:up .18s ease-out}@keyframes up{from{transform:translateY(16px);opacity:0}to{transform:none;opacity:1}}}
+</style>
+
+<div id="app" class="gutter"><div class="wrap lock" id="lock">
+  <svg class="logo" viewBox="170 80 870 1030" fill="none" stroke="currentColor" stroke-width="28" stroke-linejoin="round" aria-hidden="true"><path d="M605 100 L520 400 V1080 H690 V400 Z"/><path d="M560 560 H650 V660 H560 Z M560 760 H650 V1080 H560 Z"/><path d="M330 600 V1080 M400 480 V1080 M460 560 V1080 M250 700 V1080 M190 1080 H1040 M760 560 V1080 M830 480 V1080 M900 650 V1080 M960 720 V1080"/></svg>
+  <h1>My Covenant Path</h1>
+  <p id="lockmsg">Enter the six-digit code from your bishop to open your goal sheet.</p>
+  <input class="pin" id="pin" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" aria-label="Six-digit code" placeholder="••••••">
+  <div class="err" id="pinerr" aria-live="polite"></div>
+  <button class="btn primary" id="unlock">Open</button>
+  <div class="paste" id="paste" hidden><label class="f">Link from your bishop<textarea id="pastebox" placeholder="Paste the whole link here"></textarea></label><button class="btn" id="usepaste">Use this link</button></div>
+</div></div>
+<div id="toast" hidden role="status"></div>
+
+<script>
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],MONL=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const fmt=iso=>{if(!iso)return "";const [y,m,d]=iso.split("-").map(Number);return MON[m-1]+" "+d+", "+y};
+const fmtMY=iso=>{if(!iso)return "";const [y,m]=iso.split("-").map(Number);return MONL[m-1]+" "+y};
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+let toastT;function toast(m,ms){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,ms||2600)}
+const AREAS=[{k:"spiritual",l:"Spiritual",s:"In favour with God",c:"--sp"},{k:"intellectual",l:"Intellectual",s:"In wisdom",c:"--in"},{k:"social",l:"Social",s:"In favour with man",c:"--so"},{k:"physical",l:"Physical",s:"In stature",c:"--ph"}];
+const AREA=Object.fromEntries(AREAS.map(a=>[a.k,a]));
+
+/* ---------- crypto (matches the tracker's link maker) ---------- */
+const ITER=250000;
+const b64d=s=>{s=s.replace(/-/g,"+").replace(/_/g,"/");while(s.length%4)s+="=";return Uint8Array.from(atob(s),c=>c.charCodeAt(0))};
+const b64e=u=>btoa(String.fromCharCode(...u)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+async function keyFor(pin,salt){const km=await crypto.subtle.importKey("raw",new TextEncoder().encode(pin),"PBKDF2",false,["deriveKey"]);
+  return crypto.subtle.deriveKey({name:"PBKDF2",salt,iterations:ITER,hash:"SHA-256"},km,{name:"AES-GCM",length:256},false,["encrypt","decrypt"])}
+async function inflate(u8){if(typeof DecompressionStream==="undefined")throw new Error("old-browser");
+  const ds=new DecompressionStream("deflate-raw");const w=ds.writable.getWriter();w.write(u8);w.close();return new Uint8Array(await new Response(ds.readable).arrayBuffer())}
+async function openBlob(b64,pin){const u=b64d(b64);const ver=u[0],salt=u.slice(1,17),iv=u.slice(17,29),ct=u.slice(29);
+  const key=await keyFor(pin,salt);const pt=new Uint8Array(await crypto.subtle.decrypt({name:"AES-GCM",iv},key,ct));
+  const raw=ver===2?await inflate(pt):pt;return {data:JSON.parse(new TextDecoder().decode(raw)),key}}
+async function sealWith(key,obj){const iv=crypto.getRandomValues(new Uint8Array(12));const pt=new TextEncoder().encode(JSON.stringify(obj));
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:"AES-GCM",iv},key,pt));const out=new Uint8Array(12+ct.length);out.set(iv);out.set(ct,12);return b64e(out)}
+async function openWith(key,b64){const u=b64d(b64);const pt=await crypto.subtle.decrypt({name:"AES-GCM",iv:u.slice(0,12)},key,u.slice(12));return JSON.parse(new TextDecoder().decode(new Uint8Array(pt)))}
+
+/* ---------- bishop's inbox (Google Form) ---------- */
+const FORM={url:"",fields:{}}; /* filled in once the bishop's form exists */
+function formReady(){return !!(FORM.url&&FORM.fields.youth)}
+async function sendToForm(rows){if(!formReady())return false;const v=S.base;
+  try{for(const r of rows){const body=new URLSearchParams();body.set(FORM.fields.youth,(v.first||"")+" "+(v.last||"")+" ["+(v.id||"")+"]");
+      if(FORM.fields.area)body.set(FORM.fields.area,r.area);if(FORM.fields.date)body.set(FORM.fields.date,r.date||"");if(FORM.fields.comment)body.set(FORM.fields.comment,r.comment||"");if(FORM.fields.text)body.set(FORM.fields.text,r.text||"");
+      await fetch(FORM.url,{method:"POST",mode:"no-cors",body,keepalive:true})}
+    return true}catch(_){return false}}
+/* ---------- state ---------- */
+const S={base:null,key:null,edits:null,pin:""};
+let fails=0;
+function blobFromHash(){const h=(location.hash||"").slice(1);return /^[A-Za-z0-9_-]{40,}$/.test(h)?h:""}
+function storeKey(){return "cp:"+S.base.id}
+async function loadEdits(){try{const b=localStorage.getItem(storeKey());if(!b)return {items:{},goals:{},sentAt:""};return await openWith(S.key,b)}catch(_){return {items:{},goals:{},sentAt:""}}}
+async function saveEdits(){try{localStorage.setItem(storeKey(),await sealWith(S.key,S.edits))}catch(_){toast("Couldn't keep this on your phone. It will still be in your message.",4000)}}
+/* merged view: base data + youth's edits */
+function view(){const b=S.base,e=S.edits;const v=JSON.parse(JSON.stringify(b));
+  const it=e.items||{};
+  ["endowment","melchizedek"].forEach(k=>{if(it[k]){v.ords[k]=Object.assign({},v.ords[k]||{},{status:it[k].target?"goal":(v.ords[k]||{}).status,target:it[k].target,comment:it[k].comment})}});
+  if(it.sealing){v.ords.sealing=Object.assign({},v.ords.sealing||{},{status:it.sealing.answer==="yes"?"goal":"",answer:it.sealing.answer,comment:it.sealing.comment})}
+  if(it.pb){v.pb=Object.assign({},v.pb||{},{status:it.pb.target?"goal":(v.pb||{}).status,target:it.pb.target,comment:it.pb.comment})}
+  if(it.mission){v.mission=Object.assign({},v.mission||{},it.mission)}
+  const gm=Object.assign({},...(b.goals||[]).map(g=>({[g.id]:g})));
+  Object.entries(e.goals||{}).forEach(([id,g])=>{if(g.deleted)delete gm[id];else gm[id]=Object.assign({},gm[id]||{id},g)});
+  v.goals=Object.values(gm);return v}
+const changed=k=>!!((S.edits.items||{})[k]&&!(S.edits.items[k].sentAt));
+const gchanged=id=>!!((S.edits.goals||{})[id]&&!(S.edits.goals[id].sentAt));
+function pendingCount(){let n=0;Object.values(S.edits.items||{}).forEach(x=>{if(!x.sentAt)n++});Object.values(S.edits.goals||{}).forEach(x=>{if(!x.sentAt)n++});return n}
+
+/* ---------- lock screen ---------- */
+async function tryUnlock(){
+  const pin=$("#pin").value.trim();if(!/^\d{6}$/.test(pin)){$("#pinerr").textContent="Enter all six digits.";return}
+  const blob=blobFromHash()||sessionStorage.getItem("cp:blob")||"";
+  if(!blob){$("#pinerr").textContent="";$("#paste").hidden=false;$("#lockmsg").textContent="This link didn't carry your goal sheet. Paste the full link from your bishop below.";return}
+  $("#unlock").disabled=true;$("#pinerr").textContent="Opening…";
+  try{const {data,key}=await openBlob(blob,pin);S.base=data;S.key=key;S.pin=pin;S.edits=await loadEdits();fails=0;render()}
+  catch(e){fails++;const wait=Math.min(30,2**fails)*1000;
+    $("#pinerr").textContent=e&&e.message==="old-browser"?"This browser is too old to open the sheet. Try updating it.":"That code didn't work. Try again"+(wait>2000?" in "+Math.round(wait/1000)+" seconds":"")+".";
+    setTimeout(()=>{$("#unlock").disabled=false},wait)}
+}
+$("#unlock").addEventListener("click",tryUnlock);
+$("#pin").addEventListener("keydown",e=>{if(e.key==="Enter")tryUnlock()});
+$("#pin").addEventListener("input",e=>{e.target.value=e.target.value.replace(/\D/g,"").slice(0,6)});
+$("#usepaste").addEventListener("click",()=>{const m=$("#pastebox").value.match(/#([A-Za-z0-9_-]{40,})/);if(!m){$("#pinerr").textContent="That doesn't look like a goal sheet link.";return}
+  try{sessionStorage.setItem("cp:blob",m[1])}catch(_){}$("#paste").hidden=true;$("#lockmsg").textContent="Now enter your six-digit code.";$("#pin").focus()});
+if(blobFromHash()){try{sessionStorage.setItem("cp:blob",blobFromHash())}catch(_){}}
+setTimeout(()=>$("#pin").focus(),100);
+
+/* ---------- render ---------- */
+const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="170 80 870 1030" fill="none" stroke="#fff" stroke-width="28" stroke-linejoin="round"><path d="M605 100 L520 400 V1080 H690 V400 Z"/><path d="M560 560 H650 V660 H560 Z M560 760 H650 V1080 H560 Z"/><path d="M330 600 V1080 M400 480 V1080 M460 560 V1080 M250 700 V1080 M190 1080 H1040 M760 560 V1080 M830 480 V1080 M900 650 V1080 M960 720 V1080"/></svg>')+'">';
+function render(){
+  const v=view(),ym=v.org==="YM";document.documentElement.classList.toggle("yw",!ym);document.documentElement.classList.toggle("ym",ym);
+  const first=v.first||"";
+  const steps=[["baptism","Baptism"],["confirmation","Confirmation"]].concat(ym?[["aaronic","Aaronic Priesthood"],["melchizedek","Melchizedek Priesthood"]]:[]).concat([["endowment","Temple Endowment"],["sealing","Temple Sealing"]]);
+  const editable={melchizedek:1,endowment:1,sealing:1};
+  let path='<div class="path" style="--n:'+steps.length+'">';
+  steps.forEach(([k,l],i)=>{const st=(v.ords||{})[k]||{};const got=st.status==="received",goal=st.status==="goal",tmp=k==="endowment"||k==="sealing";
+    const can=!!editable[k]&&!got;const tag=can?'button':'div';
+    let l1,l2;
+    if(got){l1="Received";l2=k==="aaronic"&&st.office?st.office+(st.received?" · "+fmtMY(st.received):""):fmtMY(st.received)}
+    else if(k==="sealing"){l1=goal?"My goal":"";l2=goal?"In the temple":(st.answer==="no"?"Not yet":"Tap to set")}
+    else{l1=goal?"My goal":"";l2=goal?fmtMY(st.target):(can?"Tap to set":"")}
+    path+='<'+tag+' class="st'+(can?' tap':'')+(got?' got':goal?' goal':'')+(tmp?' tmp':'')+'"'+(can?' data-edit="'+k+'"':'')+'><span class="dot">'+(got?'✓':i+1)+'</span><span class="sn">'+l+(can&&changed(k)?'<span class="chip">New</span>':'')+'</span><span class="ss">'+(l1?'<b>'+l1+'</b>':'')+esc(l2)+'</span></'+tag+'>'});
+  path+='</div>';
+  const quotes=[["endowment","About my temple endowment goal",((v.ords||{}).endowment||{}).comment],["sealing","About my temple sealing goal",((v.ords||{}).sealing||{}).comment],["pb","About my patriarchal blessing",(v.pb||{}).comment]]
+    .map(([k,l,c])=>'<button class="tap qc'+(c?' has':'')+'" data-edit="'+k+'"><span>'+l+'</span>'+(c?'<em>“'+esc(c)+'”</em>':'<div class="empty">Tap to add a line in your own words</div>')+'</button>').join("");
+  const pb=v.pb||{};const pbv=pb.status==="received"?"Received":pb.target?"My goal: "+fmtMY(pb.target):"No goal yet";
+  const pbn=pb.status==="received"?"":pb.target?"Ask the bishop for a recommend":"Tap to set a goal date";
+  const rec=v.recExp?(v.recExp<today()?["Expired "+fmt(v.recExp),"Schedule a recommend interview"]:["Current through "+fmt(v.recExp),""]):["Not yet",""];
+  const mis=v.mission||{};const misv=mis.answer==="yes"?(mis.date?"Planned start "+fmtMY(mis.date):"Yes"):mis.answer==="no"?"Not at this time":"Tap to answer";
+  const along='<div class="boxes">'+
+    '<button class="tap box'+(pb.target?' has':'')+'" data-edit="pb"><div class="k">Patriarchal blessing'+(changed("pb")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(pbv)+'</div>'+(pbn?'<div class="n">'+pbn+'</div>':'')+'</button>'+
+    '<div class="box" style="padding-right:14px"><div class="k">Temple recommend</div><div class="v">'+esc(rec[0])+'</div>'+(rec[1]?'<div class="n">'+rec[1]+'</div>':'')+'</div>'+
+    '<button class="tap box'+(mis.answer?' has':'')+'" data-edit="mission"><div class="k">Full-time mission'+(changed("mission")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(misv)+'</div></button>'+
+    '</div>';
+  const areas='<div class="areas">'+AREAS.map(a=>{const gs=(v.goals||[]).filter(g=>g.kind===a.k);
+    return '<div class="area" style="--c:var('+a.c+')"><div class="t"><b>'+a.l+'</b><i>'+a.s+'</i></div><ul>'+
+      gs.map(g=>'<li><button class="g'+(g.status==="completed"?' done':'')+'" data-goal="'+esc(g.id)+'">'+'<span>'+esc(g.title)+(gchanged(g.id)?'<span class="chip">New</span>':'')+(g.target?'<span class="d">By '+fmt(g.target)+'</span>':'')+'</span></button></li>').join("")+
+      '</ul><button class="add" data-add="'+a.k+'">+ Add a goal</button></div>'}).join("")+'</div>';
+  const men=(v.mentors||[]).slice(0,5);while(men.length<5)men.push("");
+  const pend=pendingCount();
+  $("#app").innerHTML='<header class="hd"><div class="wrap"><div class="t"><div class="ey">My Covenant Path</div><h1>'+esc((v.first||"")+" "+(v.last||""))+'</h1><div class="sub">'+(ym?"Young Men":"Young Women")+(v.group?' · '+esc(v.group):'')+'</div></div>'+TEMPLE+'</div></header>'+
+   '<main class="wrap">'+
+   '<section><div class="sh"><h2>My Path to the Temple</h2><div class="q">“Every sincere seeker of Jesus Christ will find Him in the temple.”<b>President Nelson</b></div></div>'+path+quotes+'</section>'+
+   '<section><div class="sh"><h2>Along the Way</h2></div>'+along+'</section>'+
+   '<section><div class="sh"><h2>Growing in Wisdom and Stature</h2><div class="q">“And Jesus increased in wisdom and stature, and in favour with God and man.”<b>Luke 2:52</b></div></div><p class="lead">Tap a goal to change it, or add a new one.</p>'+areas+'</section>'+
+   '<section><div class="sh"><h2>My Mentors</h2><div class="q">“Prayerfully select mentors who have your spiritual well-being at heart.”<b>Elder Robert D. Hales</b></div></div><div class="men">'+men.map(m=>m?'<span>'+esc(m)+'</span>':'<span class="wr"></span>').join("")+'</div></section>'+
+   '</main>'+
+   '<div class="donebar gutter"><div class="wrap"><p>'+(pend?pend+' change'+(pend>1?'s':'')+' not yet sent to '+esc(v.bishop||"the bishop")+'.':(S.edits.sentAt?'Last sent '+fmt(S.edits.sentAt)+'.':'Changes are saved on this phone until you send them.'))+'</p><button class="btn primary" id="done"'+(pend?'':' disabled')+'>Done — send to '+esc(v.bishop||"the bishop")+'</button></div></div>';
+  $("#app").classList.remove("lock");
+  document.title="My Covenant Path";
+}
+
+/* ---------- editing ---------- */
+function sheet(html){const ov=document.createElement("div");ov.className="ov";ov.innerHTML='<div class="sheet" role="dialog" aria-modal="true">'+html+'</div>';document.body.appendChild(ov);
+  ov.addEventListener("click",e=>{if(e.target===ov)ov.remove()});document.addEventListener("keydown",function k(e){if(e.key==="Escape"){ov.remove();document.removeEventListener("keydown",k)}});
+  const f=ov.querySelector("input,textarea,button[aria-pressed]");f&&setTimeout(()=>f.focus(),50);return ov}
+const dateF=(id,l,v,min)=>'<label class="f">'+l+'<input type="date" id="'+id+'" value="'+esc(v||"")+'"'+(min?' min="'+min+'"':'')+'></label>';
+const textF=(id,l,v,ph)=>'<label class="f">'+l+'<textarea id="'+id+'" placeholder="'+esc(ph||"")+'">'+esc(v||"")+'</textarea></label>';
+const acts=(save,extra)=>'<div class="acts">'+(extra||"")+'<button class="btn ghost" data-x="cancel">Cancel</button><button class="btn primary" data-x="save">'+(save||"Save")+'</button></div>';
+function editItem(k){const v=view();
+  const T={endowment:["Temple Endowment","When would you like to receive your endowment?","In my own words"],melchizedek:["Melchizedek Priesthood","When would you like to be ordained?","In my own words"],pb:["Patriarchal Blessing","When would you like to receive your patriarchal blessing?","Why this matters to me"],sealing:["Temple Sealing","Is being sealed in the temple one of your goals?","In my own words"],mission:["Full-Time Mission","Are you planning to serve a full-time mission?","Notes"]}[k];
+  const cur=k==="pb"?(v.pb||{}):k==="mission"?(v.mission||{}):((v.ords||{})[k]||{});
+  const yn=k==="sealing"||k==="mission";
+  const ov=sheet('<h3>'+T[0]+'</h3><p class="hint">'+T[1]+'</p>'+
+    (yn?'<div class="seg" role="group"><button type="button" data-v="yes" aria-pressed="'+(cur.answer==="yes")+'">Yes</button><button type="button" data-v="no" aria-pressed="'+(cur.answer==="no")+'">Not yet</button></div>':'')+
+    (k==="mission"?dateF("e-date","Planned start (optional)",cur.date):yn?'':dateF("e-date","Goal date",cur.target,today()))+
+    textF("e-text",T[2],cur.comment,"A line or two from you (optional)")+
+    (k==="endowment"||k==="melchizedek"?'<p class="note">Pick the month and year you have in mind. The exact day can change later.</p>':'')+
+    acts());
+  let ans=cur.answer||"";
+  ov.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{ans=b.dataset.v;ov.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b))}));
+  ov.querySelector('[data-x="cancel"]').addEventListener("click",()=>ov.remove());
+  ov.querySelector('[data-x="save"]').addEventListener("click",async()=>{
+    const date=ov.querySelector("#e-date"),text=ov.querySelector("#e-text").value.trim();
+    const item={comment:text,on:today()};
+    if(k==="mission"){if(!ans){toast("Choose Yes or Not yet.");return}item.answer=ans;item.date=date.value||""}
+    else if(k==="sealing"){if(!ans){toast("Choose Yes or Not yet.");return}item.answer=ans}
+    else{if(!date.value&&!text){toast("Pick a date or write a line.");return}item.target=date.value||cur.target||""}
+    S.edits.items=S.edits.items||{};S.edits.items[k]=item;await saveEdits();ov.remove();render();
+    const name={endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"}[k];
+    const sent=await sendToForm([{area:name,date:item.target||item.date||"",comment:item.comment||"",text:k==="sealing"||k==="mission"?(item.answer||""):""}]);
+    if(sent){item.sentAt=today();S.edits.sentAt=today();await saveEdits();render();toast("Saved and sent to "+((S.base||{}).bishop||"the bishop")+".",3200)}else toast("Saved on this phone.")});
+}
+function editGoal(id,kind){const v=view();const g=id?(v.goals||[]).find(x=>x.id===id)||{}:{kind};const a=AREA[g.kind||kind];
+  const ov=sheet('<h3>'+(id?'Edit goal':'New '+a.l.toLowerCase()+' goal')+'</h3><p class="hint">'+a.l+' · '+a.s+'</p>'+
+    '<label class="f">What I want to do<input type="text" id="g-title" value="'+esc(g.title)+'" placeholder="For example: Read the Book of Mormon 10 minutes a day"></label>'+
+    dateF("g-date","By when",g.target,"")+
+    (id?'<label class="f">Status<select id="g-status"><option value="active"'+(g.status!=="completed"?' selected':'')+'>Working on it</option><option value="completed"'+(g.status==="completed"?' selected':'')+'>Completed</option></select></label>':'')+
+    acts("Save",id?'<button class="btn ghost left" data-x="del">Remove</button>':''));
+  ov.querySelector('[data-x="cancel"]').addEventListener("click",()=>ov.remove());
+  const del=ov.querySelector('[data-x="del"]');del&&del.addEventListener("click",async()=>{S.edits.goals=S.edits.goals||{};S.edits.goals[id]={deleted:true,title:g.title,kind:g.kind,on:today()};await saveEdits();ov.remove();render();const sent=await sendToForm([{area:AREA[g.kind].l,date:"",comment:"",text:"Removed: "+g.title}]);if(sent){S.edits.goals[id].sentAt=today();await saveEdits();render()}toast("Goal removed.")});
+  ov.querySelector('[data-x="save"]').addEventListener("click",async()=>{
+    const title=ov.querySelector("#g-title").value.trim();if(!title){toast("Write what you want to do.");return}
+    const gid=id||("y"+Date.now().toString(36));const st=ov.querySelector("#g-status");
+    S.edits.goals=S.edits.goals||{};S.edits.goals[gid]={id:gid,kind:g.kind||kind,title,target:ov.querySelector("#g-date").value||"",status:st?st.value:"active",on:today()};
+    await saveEdits();ov.remove();render();const G=S.edits.goals[gid];
+    const sent=await sendToForm([{area:AREA[G.kind].l,date:G.target||"",comment:"",text:G.title+(G.status==="completed"?" (completed)":"")}]);
+    if(sent){G.sentAt=today();S.edits.sentAt=today();await saveEdits();render();toast("Saved and sent to "+((S.base||{}).bishop||"the bishop")+".",3200)}else toast("Saved on this phone.")});
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-edit],[data-goal],[data-add],#done");if(!t)return;
+  if(t.dataset.edit)editItem(t.dataset.edit);else if(t.dataset.goal)editGoal(t.dataset.goal);else if(t.dataset.add)editGoal("",t.dataset.add);else if(t.id==="done")doneSheet();
+});
+
+/* ---------- send to bishop ---------- */
+function message(){const v=view(),it=S.edits.items||{},gs=S.edits.goals||{};const L=[];
+  const name={endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"};
+  Object.entries(it).forEach(([k,x])=>{if(x.sentAt)return;let s="• "+name[k]+": ";
+    if(k==="sealing")s+=x.answer==="yes"?"yes, my goal":"not yet";
+    else if(k==="mission")s+=(x.answer==="yes"?"yes":"not at this time")+(x.date?", planned start "+fmtMY(x.date):"");
+    else s+=x.target?"goal date "+fmtMY(x.target):"no date yet";
+    if(x.comment)s+='. "'+x.comment+'"';L.push(s)});
+  Object.values(gs).forEach(g=>{if(g.sentAt)return;if(g.deleted){L.push("• Removed "+AREA[g.kind].l.toLowerCase()+" goal: "+g.title);return}
+    L.push("• "+AREA[g.kind].l+": "+g.title+(g.target?" — by "+fmt(g.target):"")+(g.status==="completed"?" (completed)":""))});
+  return "Goal update from "+(v.first||"")+" "+(v.last||"")+" ("+fmt(today())+")\n"+L.join("\n")}
+async function markSent(){const d=today();Object.values(S.edits.items||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});Object.values(S.edits.goals||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});S.edits.sentAt=d;await saveEdits()}
+function doneSheet(){const v=view(),m=message(),who=v.bishop||"the bishop";
+  const sms="sms:"+(v.bishopPhone||"")+"?&body="+encodeURIComponent(m);
+  const ov=sheet('<h3>Send to '+esc(who)+'</h3><p class="hint">Text or email this to '+esc(who)+'. It lists only what you changed.</p><div class="msg" id="msgbox">'+esc(m)+'</div>'+
+    '<div class="acts"><button class="btn ghost left" data-x="cancel">Not now</button><button class="btn" id="copy">Copy message</button><a class="btn primary" id="sms" href="'+esc(sms)+'">Send to '+esc(who)+'</a></div>'+
+    '<p class="note">If Messages doesn\'t open, copy the message and paste it into a text or email.</p>');
+  ov.querySelector('[data-x="cancel"]').addEventListener("click",()=>ov.remove());
+  ov.querySelector("#copy").addEventListener("click",async()=>{let ok=false;try{await navigator.clipboard.writeText(m);ok=true}catch(_){}
+    if(!ok){const r=document.createRange();r.selectNodeContents(ov.querySelector("#msgbox"));const s=getSelection();s.removeAllRanges();s.addRange(r);try{ok=document.execCommand("copy")}catch(_){}}
+    if(ok){await markSent();toast("Copied. Paste it into a text to "+who+".",3500);ov.remove();render()}else toast("Select the message and copy it.",3500)});
+  ov.querySelector("#sms").addEventListener("click",async e=>{if(navigator.share){e.preventDefault();try{await navigator.share({text:m});await markSent();ov.remove();render();toast("Sent.",2500)}catch(_){}return}
+    await markSent();setTimeout(()=>{ov.remove();render();toast("If a text opened, tap Send.",3500)},400)});
+}
+</script>
+
+</body>
+</html>
