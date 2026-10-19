@@ -284,7 +284,7 @@ const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+
 function render(){
   const v=view(),ym=v.org==="YM";document.documentElement.classList.toggle("yw",!ym);document.documentElement.classList.toggle("ym",ym);
   const first=v.first||"";
-  const steps=[["baptism","Baptism"],["confirmation","Confirmation"]].concat(ym?[["aaronic","Aaronic Priesthood"],["melchizedek","Melchizedek Priesthood"]]:[]).concat([["endowment","Temple Endowment"],["sealing","Temple Sealing"]]);
+  const steps=[["baptism","Baptism"],["confirmation","Confirmation"]].concat(ym?[["melchizedek","Melchizedek Priesthood"]]:[]).concat([["endowment","Temple Endowment"],["sealing","Temple Sealing"]]);
   const editable={melchizedek:1,endowment:1,sealing:1};
   let path='<div class="path" style="--n:'+steps.length+'">';
   steps.forEach(([k,l],i)=>{const st=(v.ords||{})[k]||{};const got=st.status==="received",goal=st.status==="goal",tmp=k==="endowment"||k==="sealing";
