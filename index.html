@@ -293,7 +293,7 @@ function render(){
   const pend=pendingCount();
   $("#app").innerHTML='<header class="hd"><div class="wrap"><div class="t"><div class="ey">My Covenant Path</div><h1>'+esc((v.first||"")+" "+(v.last||""))+'</h1><div class="sub">'+(ym?"Young Men":"Young Women")+(v.group?' · '+esc(v.group):'')+'</div></div>'+TEMPLE+'</div></header>'+
    '<main class="wrap">'+
-   '<section><div class="sh"><h2>My Path to the Temple</h2><div class="q">“Every sincere seeker of Jesus Christ will find Him in the temple.”<b>President Nelson</b></div></div>'+path+quotes+'</section>'+
+   '<section><div class="sh"><h2>My Covenant Path</h2><div class="q">“Every sincere seeker of Jesus Christ will find Him in the temple.”<b>President Nelson</b></div></div>'+path+quotes+'</section>'+
    '<section><div class="sh"><h2>Along the Way</h2></div>'+along+'</section>'+
    '<section><div class="sh"><h2>Growing in Wisdom and Stature</h2><div class="q">“And Jesus increased in wisdom and stature, and in favour with God and man.”<b>Luke 2:52</b></div></div><p class="lead">Tap a goal to change it, or add a new one.</p>'+areas+'</section>'+
    '<section><div class="sh"><h2>My Mentors</h2><div class="q">“Prayerfully select mentors who have your spiritual well-being at heart.”<b>Elder Robert D. Hales</b></div></div><div class="men">'+men.map(m=>m?'<span>'+esc(m)+'</span>':'<span class="wr"></span>').join("")+'</div></section>'+
