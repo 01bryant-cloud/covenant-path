@@ -403,7 +403,7 @@ document.addEventListener("click",e=>{
 });
 
 function editMentor(ix){const v=view();const m=v.mentors[ix]||{name:"",note:""};
-  const ov=sheet('<h3>'+(m.name?'Mentor':'Add a mentor')+'</h3><p class="hint">Someone who has your spiritual well-being at heart.</p>'+
+  const ov=sheet('<h3>'+(m.name?'Mentor':'Add a mentor')+'</h3><p class="hint">'+(v.org==="YM"?"Which men in the ward do you look up to and connect with?":"Which women in the ward do you look up to and connect with?")+'</p>'+
     '<label class="f">Name<input type="text" id="m-name" value="'+esc(m.name)+'" placeholder="Their name" autocomplete="off"></label>'+
     '<label class="f">Who they are (optional)<input type="text" id="m-note" value="'+esc(m.note)+'" placeholder="For example: my uncle, a Young Women adviser"></label>'+
     acts("Save",m.name?'<button class="btn ghost left" data-x="del">Remove</button>':''));
