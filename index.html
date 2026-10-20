@@ -348,7 +348,7 @@ const dateF=(id,l,v,min)=>'<label class="f">'+l+'<input type="date" id="'+id+'" 
 const textF=(id,l,v,ph)=>'<label class="f">'+l+'<textarea id="'+id+'" placeholder="'+esc(ph||"")+'">'+esc(v||"")+'</textarea></label>';
 const acts=(save,extra)=>'<div class="acts">'+(extra||"")+'<button class="btn ghost" data-x="cancel">Cancel</button><button class="btn primary" data-x="save">'+(save||"Save")+'</button></div>';
 function editItem(k){const v=view();
-  const T={endowment:["Temple Endowment","When would you like to receive your endowment?","In my own words"],melchizedek:["Melchizedek Priesthood","When would you like to be ordained?","In my own words"],pb:["Patriarchal Blessing","When would you like to receive your patriarchal blessing?","Why this matters to me"],sealing:["Temple Sealing","Is being sealed in the temple one of your goals?","In my own words"],mission:["Full-Time Mission","Are you planning to serve a full-time mission?","Notes"]}[k];
+  const T={endowment:["Temple Endowment","When would you like to receive your endowment?","In my own words"],melchizedek:["Melchizedek Priesthood","When would you like to receive the Melchizedek Priesthood?","In my own words"],pb:["Patriarchal Blessing","When would you like to receive your patriarchal blessing?","Why this matters to me"],sealing:["Temple Sealing","Is being sealed in the temple one of your goals?","In my own words"],mission:["Full-Time Mission","Are you planning to serve a full-time mission?","Notes"]}[k];
   const cur=k==="pb"?(v.pb||{}):k==="mission"?(v.mission||{}):((v.ords||{})[k]||{});
   const yn=k==="sealing"||k==="mission";
   const ov=sheet('<h3>'+T[0]+'</h3><p class="hint">'+T[1]+'</p>'+
