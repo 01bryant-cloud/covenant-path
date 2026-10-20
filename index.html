@@ -323,12 +323,12 @@ function render(){
   const pb=v.pb||{};const pbv=pb.status==="received"?"Received":pb.target?"My goal: "+fmtMY(pb.target):"No goal yet";
   const pbn=pb.status==="received"?"":pb.target?"":"Tap to set a goal date";
   const rec=v.recExp?(v.recExp<today()?["Expired "+fmt(v.recExp),"Schedule a recommend interview"]:["Current through "+fmt(v.recExp),""]):["Not yet",""];
-  const mis=v.mission||{};const misv=mis.answer==="yes"?(mis.date?"Planned start "+fmtMY(mis.date):"Yes"):mis.answer==="no"?"Not at this time":"Tap to answer";
+  const mis=v.mission||{};const misv=mis.answer==="yes"?(mis.date?"My goal: "+fmtMY(mis.date):"My goal: serve"):mis.answer==="no"?"Not at this time":"No goal yet";const misn=mis.answer?"":"Tap to answer";
   const along='<div class="boxes">'+
     (pb.status==="received"?'<div class="box" style="padding-right:14px"><div class="k">Patriarchal blessing</div><div class="v">Received</div></div>':
     '<button class="tap box'+(pb.target?' has':'')+'" data-edit="pb"><div class="k">Patriarchal blessing'+(changed("pb")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(pbv)+'</div>'+(pbn?'<div class="n">'+pbn+'</div>':'')+'</button>')+
     '<div class="box" style="padding-right:14px"><div class="k">Temple recommend</div><div class="v">'+esc(rec[0])+'</div>'+(rec[1]?'<div class="n">'+rec[1]+'</div>':'')+'</div>'+
-    '<button class="tap box'+(mis.answer?' has':'')+'" data-edit="mission"><div class="k">Full-time mission'+(changed("mission")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(misv)+'</div></button>'+
+    '<button class="tap box'+(mis.answer?' has':'')+'" data-edit="mission"><div class="k">Full-time mission'+(changed("mission")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(misv)+'</div>'+(misn?'<div class="n">'+misn+'</div>':'')+'</button>'+
     '</div>';
   const areas='<div class="areas">'+AREAS.map(a=>{const gs=(v.goals||[]).filter(g=>g.kind===a.k);
     return '<div class="area" style="--c:var('+a.c+')"><div class="t"><b>'+a.l+'</b><i>'+a.s+'</i></div><ul>'+
