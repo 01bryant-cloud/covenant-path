@@ -356,7 +356,7 @@ function editItem(k){const v=view();
     (k==="mission"?dateF("e-date","Planned start (optional)",cur.date):yn?'':dateF("e-date","Goal date",cur.target,today()))+
     (k==="endowment"&&v.grad?'<p class="note" style="margin-top:-8px">Earliest eligibility: after graduation (June '+esc(v.grad)+')</p>':'')+
     textF("e-text",T[2],cur.comment,k==="endowment"?"Write your goal and why it is important to you.":"A line or two from you (optional)")+
-    (k==="endowment"?'<p class="note">Once you have selected the date you would like to receive your temple endowment, prayerfully share your goal with Heavenly Father and ask for His help to prepare.</p>':k==="melchizedek"?'<p class="note">Pick the month and year you have in mind. The exact day can change later.</p>':'')+
+    (k==="endowment"?'<p class="note">Prayerfully share your goals with Heavenly Father and ask for His help to accomplish them.</p>':k==="melchizedek"?'<p class="note">Pick the month and year you have in mind. The exact day can change later.</p>':'')+
     acts());
   let ans=cur.answer||"";
   ov.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{ans=b.dataset.v;ov.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b))}));
