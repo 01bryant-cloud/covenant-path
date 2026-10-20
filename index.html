@@ -353,7 +353,7 @@ function editItem(k){const v=view();
   const ov=sheet('<h3>'+T[0]+'</h3><p class="hint">'+T[1]+'</p>'+
     (yn?'<div class="seg" role="group"><button type="button" data-v="yes" aria-pressed="'+(cur.answer==="yes")+'">Yes</button><button type="button" data-v="no" aria-pressed="'+(cur.answer==="no")+'">Not yet</button></div>':'')+
     (k==="mission"?dateF("e-date","Planned start (optional)",cur.date):yn?'':dateF("e-date","Goal date",cur.target,today()))+
-    (k==="endowment"&&v.grad?'<p class="note" style="margin-top:-8px">Earliest: after graduation (June '+esc(v.grad)+')</p>':'')+
+    (k==="endowment"&&v.grad?'<p class="note" style="margin-top:-8px">Earliest eligibility: after graduation (June '+esc(v.grad)+')</p>':'')+
     textF("e-text",T[2],cur.comment,k==="endowment"?"Write your goal using your own words. Include a sentence or two about why this goal is important to you.":"A line or two from you (optional)")+
     (k==="endowment"?'<p class="note">Once you have selected the date you would like to receive your temple endowment, prayerfully share your goal with Heavenly Father and ask for His help to prepare.</p>':k==="melchizedek"?'<p class="note">Pick the month and year you have in mind. The exact day can change later.</p>':'')+
     acts());
