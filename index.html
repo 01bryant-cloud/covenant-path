@@ -356,7 +356,7 @@ function editItem(k){const v=view();
     (k==="mission"?dateF("e-date","Planned start (optional)",cur.date):yn?'':dateF("e-date","Goal date",cur.target,((k==="endowment"||k==="melchizedek")&&v.e18&&v.e18>today())?v.e18:today()))+
     (k==="endowment"&&v.grad?'<p class="note" style="margin-top:-8px">Earliest eligibility: after graduation (June '+esc(v.grad)+')</p>':k==="melchizedek"&&v.e18?'<p class="note" style="margin-top:-8px">Earliest eligibility: '+fmt(v.e18)+' (18th birthday)</p>':'')+
     textF("e-text",T[2],cur.comment,"Write your goal and why it is important to you.")+
-    (k==="endowment"?'<p class="note">Prayerfully share your goals with Heavenly Father and ask for His help to accomplish them.</p>':k==="melchizedek"?'<p class="note">Pick the month and year you have in mind. The exact day can change later.</p>':'')+
+    '<p class="note">Prayerfully share your goals with Heavenly Father and ask for His help to accomplish them.</p>'+
     acts());
   let ans=cur.answer||"";
   ov.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{ans=b.dataset.v;ov.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b))}));
@@ -376,6 +376,7 @@ function editGoal(id,kind){const v=view();const g=id?(v.goals||[]).find(x=>x.id=
   const ov=sheet('<h3>'+(id?'Edit goal':'New '+a.l.toLowerCase()+' goal')+'</h3><p class="hint">'+a.l+' · '+a.s+'</p>'+
     '<label class="f">What I want to do<input type="text" id="g-title" value="'+esc(g.title)+'" placeholder="For example: Read the Book of Mormon 10 minutes a day"></label>'+
     dateF("g-date","By when",g.target,"")+
+    '<p class="note">Prayerfully share your goals with Heavenly Father and ask for His help to accomplish them.</p>'+
     (id?'<label class="f">Status<select id="g-status"><option value="active"'+(g.status!=="completed"?' selected':'')+'>Working on it</option><option value="completed"'+(g.status==="completed"?' selected':'')+'>Completed</option></select></label>':'')+
     acts("Save",id?'<button class="btn ghost left" data-x="del">Remove</button>':''));
   ov.querySelector('[data-x="cancel"]').addEventListener("click",()=>ov.remove());
