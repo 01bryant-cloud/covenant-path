@@ -117,6 +117,10 @@ section{display:flex;flex-direction:column;gap:12px}
 .men{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
 .men span{border:1.5px solid var(--pn);background:color-mix(in srgb,var(--pn) 10%,var(--surface));color:var(--pn);border-radius:10px;padding:8px;font-size:.88rem;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;min-height:40px}
 .men span.wr{background:none;border:1.5px dashed var(--line)}
+.mb{all:unset;box-sizing:border-box;cursor:pointer;border:1.5px solid var(--pn);background:color-mix(in srgb,var(--pn) 10%,var(--surface));color:var(--pn);border-radius:10px;padding:8px;font-size:.88rem;font-weight:600;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:44px}
+.mb i{font-style:normal;font-weight:400;font-size:.74rem;color:var(--muted)}
+.mb.wr{background:none;border:1.5px dashed var(--line);color:var(--muted);font-weight:500}
+.mb:focus-visible{outline:2px solid var(--pn);outline-offset:2px}
 /* music */
 .music{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:6px 8px 6px 14px;background:var(--surface);margin-top:-6px}
 .music .mt{flex:1;min-width:0;font-size:.85rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -227,7 +231,7 @@ async function fetchBlob(key){
   const j=JSON.parse(m[1]);const rows=(j.table&&j.table.rows)||[];const v=rows.length&&rows[0].c&&rows[0].c[0]&&rows[0].c[0].v;
   if(!v)throw new Error("nokey");return String(v)}
 function storeKey(){return "cp:"+(keyFromHash()||S.base.id)}
-async function loadEdits(){try{const b=localStorage.getItem(storeKey());if(!b)return {items:{},goals:{},sentAt:""};return await openWith(S.key,b)}catch(_){return {items:{},goals:{},sentAt:""}}}
+async function loadEdits(){try{const b=localStorage.getItem(storeKey());if(!b)return {items:{},goals:{},mentors:{},sentAt:""};return await openWith(S.key,b)}catch(_){return {items:{},goals:{},mentors:{},sentAt:""}}}
 async function saveEdits(){try{localStorage.setItem(storeKey(),await sealWith(S.key,S.edits))}catch(_){toast("Couldn't keep this on your phone. It will still be in your message.",4000)}}
 /* merged view: base data + youth's edits */
 function view(){const b=S.base,e=S.edits;const v=JSON.parse(JSON.stringify(b));
@@ -238,10 +242,13 @@ function view(){const b=S.base,e=S.edits;const v=JSON.parse(JSON.stringify(b));
   if(it.mission){v.mission=Object.assign({},v.mission||{},it.mission)}
   const gm=Object.assign({},...(b.goals||[]).map(g=>({[g.id]:g})));
   Object.entries(e.goals||{}).forEach(([id,g])=>{if(g.deleted)delete gm[id];else gm[id]=Object.assign({},gm[id]||{id},g)});
-  v.goals=Object.values(gm);return v}
+  v.goals=Object.values(gm);
+  const ms=(b.mentors||[]).map(m=>typeof m==="string"?{name:m,note:""}:{name:(m&&m.name)||(m&&m.n)||"",note:(m&&m.note)||(m&&m.t)||""});while(ms.length<5)ms.push({name:"",note:""});
+  Object.entries(e.mentors||{}).forEach(([ix,m])=>{if(ms[ix])ms[ix]=m.deleted?{name:"",note:""}:{name:m.name,note:m.note||""}});v.mentors=ms.slice(0,5);return v}
 const changed=k=>!!((S.edits.items||{})[k]&&!(S.edits.items[k].sentAt));
 const gchanged=id=>!!((S.edits.goals||{})[id]&&!(S.edits.goals[id].sentAt));
-function pendingCount(){let n=0;Object.values(S.edits.items||{}).forEach(x=>{if(!x.sentAt)n++});Object.values(S.edits.goals||{}).forEach(x=>{if(!x.sentAt)n++});return n}
+const mchanged=ix=>!!((S.edits.mentors||{})[ix]&&!(S.edits.mentors[ix].sentAt));
+function pendingCount(){let n=0;Object.values(S.edits.items||{}).forEach(x=>{if(!x.sentAt)n++});Object.values(S.edits.goals||{}).forEach(x=>{if(!x.sentAt)n++});Object.values(S.edits.mentors||{}).forEach(x=>{if(!x.sentAt)n++});return n}
 
 /* ---------- lock screen ---------- */
 async function tryUnlock(){
@@ -327,14 +334,14 @@ function render(){
     return '<div class="area" style="--c:var('+a.c+')"><div class="t"><b>'+a.l+'</b><i>'+a.s+'</i></div><ul>'+
       gs.map(g=>'<li><button class="g'+(g.status==="completed"?' done':'')+'" data-goal="'+esc(g.id)+'">'+'<span>'+esc(g.title)+(gchanged(g.id)?'<span class="chip">New</span>':'')+(g.target?'<span class="d">By '+fmt(g.target)+'</span>':'')+'</span></button></li>').join("")+
       '</ul><button class="add" data-add="'+a.k+'">+ Add a goal</button></div>'}).join("")+'</div>';
-  const men=(v.mentors||[]).slice(0,5);while(men.length<5)men.push("");
+  const men=v.mentors;
   const pend=pendingCount();
   $("#app").innerHTML='<header class="hd"><div class="wrap"><div class="t"><div class="ey">My Covenant Path</div><h1>'+esc((v.first||"")+" "+(v.last||""))+'</h1><div class="sub">'+(ym?"Young Men":"Young Women")+(v.group?' · '+esc(v.group):'')+'</div></div>'+TEMPLE+'</div></header>'+
    '<main class="wrap">'+musicBar()+
    '<section><div class="sh"><h2>My Covenant Path</h2><div class="q">“Every sincere seeker of Jesus Christ will find Him in the temple.”<b>President Nelson</b></div></div>'+path+quotes+'</section>'+
    '<section><div class="sh"><h2>Along the Way</h2></div>'+along+'</section>'+
    '<section><div class="sh"><h2>Wisdom and Stature</h2><div class="q">“And Jesus increased in wisdom and stature, and in favour with God and man.”<b>Luke 2:52</b></div></div><p class="lead">Tap a goal to change it, or add a new one.</p>'+areas+'</section>'+
-   '<section><div class="sh"><h2>My Mentors</h2><div class="q">“Prayerfully select mentors who have your spiritual well-being at heart.”<b>Elder Robert D. Hales</b></div></div><div class="men">'+men.map(m=>m?'<span>'+esc(m)+'</span>':'<span class="wr"></span>').join("")+'</div></section>'+
+   '<section><div class="sh"><h2>My Mentors</h2><div class="q">“Prayerfully select mentors who have your spiritual well-being at heart.”<b>Elder Robert D. Hales</b></div></div><p class="lead">Tap a box to add or change a mentor.</p><div class="men">'+men.map((m,ix)=>m.name?'<button type="button" class="mb" data-mentor="'+ix+'"><b>'+esc(m.name)+'</b>'+(m.note?'<i>'+esc(m.note)+'</i>':'')+(mchanged(ix)?'<span class="chip">New</span>':'')+'</button>':'<button type="button" class="mb wr" data-mentor="'+ix+'">+ Add a mentor</button>').join("")+'</div></section>'+
    '</main>'+
    '<div class="donebar gutter"><div class="wrap"><p>'+(pend?pend+' change'+(pend>1?'s':'')+' not yet sent to '+esc(v.bishop||"the bishop")+'.':(S.edits.sentAt?'Last sent '+fmt(S.edits.sentAt)+'.':'Changes are saved on this phone until you send them.'))+'</p><button class="btn primary" id="done"'+(pend?'':' disabled')+'>Done — send to '+esc(v.bishop||"the bishop")+'</button></div></div>';
   $("#app").classList.remove("lock");
@@ -391,9 +398,23 @@ function editGoal(id,kind){const v=view();const g=id?(v.goals||[]).find(x=>x.id=
     if(sent){G.sentAt=today();S.edits.sentAt=today();await saveEdits();render();toast("Saved and sent to "+((S.base||{}).bishop||"the bishop")+".",3200)}else toast("Saved on this phone.")});
 }
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-edit],[data-goal],[data-add],#done");if(!t)return;
-  if(t.dataset.edit)editItem(t.dataset.edit);else if(t.dataset.goal)editGoal(t.dataset.goal);else if(t.dataset.add)editGoal("",t.dataset.add);else if(t.id==="done")doneSheet();
+  const t=e.target.closest("[data-edit],[data-goal],[data-add],[data-mentor],#done");if(!t)return;
+  if(t.dataset.edit)editItem(t.dataset.edit);else if(t.dataset.goal)editGoal(t.dataset.goal);else if(t.dataset.add)editGoal("",t.dataset.add);else if(t.dataset.mentor!=null)editMentor(+t.dataset.mentor);else if(t.id==="done")doneSheet();
 });
+
+function editMentor(ix){const v=view();const m=v.mentors[ix]||{name:"",note:""};
+  const ov=sheet('<h3>'+(m.name?'Mentor':'Add a mentor')+'</h3><p class="hint">Someone who has your spiritual well-being at heart.</p>'+
+    '<label class="f">Name<input type="text" id="m-name" value="'+esc(m.name)+'" placeholder="Their name" autocomplete="off"></label>'+
+    '<label class="f">Who they are (optional)<input type="text" id="m-note" value="'+esc(m.note)+'" placeholder="For example: my uncle, a Young Women adviser"></label>'+
+    acts("Save",m.name?'<button class="btn ghost left" data-x="del">Remove</button>':''));
+  ov.querySelector('[data-x="cancel"]').addEventListener("click",()=>ov.remove());
+  const del=ov.querySelector('[data-x="del"]');del&&del.addEventListener("click",async()=>{S.edits.mentors=S.edits.mentors||{};S.edits.mentors[ix]={deleted:true,name:m.name,on:today()};await saveEdits();ov.remove();render();
+    const sent=await sendToForm([{area:"Mentor",date:"",comment:"",text:"Removed "+(ix+1)+": "+m.name}]);if(sent){S.edits.mentors[ix].sentAt=today();await saveEdits();render()}toast("Mentor removed.")});
+  ov.querySelector('[data-x="save"]').addEventListener("click",async()=>{const name=ov.querySelector("#m-name").value.trim(),note=ov.querySelector("#m-note").value.trim();if(!name){toast("Write their name.");return}
+    S.edits.mentors=S.edits.mentors||{};S.edits.mentors[ix]={name,note,on:today()};await saveEdits();ov.remove();render();
+    const sent=await sendToForm([{area:"Mentor",date:"",comment:note,text:(ix+1)+": "+name}]);
+    if(sent){S.edits.mentors[ix].sentAt=today();S.edits.sentAt=today();await saveEdits();render();toast("Saved and sent to "+((S.base||{}).bishop||"the bishop")+".",3200)}else toast("Saved on this phone.")});
+}
 
 /* ---------- send to bishop ---------- */
 function message(){const v=view(),it=S.edits.items||{},gs=S.edits.goals||{};const L=[];
@@ -403,10 +424,11 @@ function message(){const v=view(),it=S.edits.items||{},gs=S.edits.goals||{};cons
     else if(k==="mission")s+=(x.answer==="yes"?"yes":"not at this time")+(x.date?", planned start "+fmtMY(x.date):"");
     else s+=x.cleared?"cleared":x.target?"goal date "+fmtMY(x.target):"no date yet";
     if(x.comment)s+='. "'+x.comment+'"';L.push(s)});
+  Object.values(S.edits.mentors||{}).forEach(m=>{if(m.sentAt)return;L.push(m.deleted?"• Removed mentor: "+m.name:"• Mentor: "+m.name+(m.note?" ("+m.note+")":""))});
   Object.values(gs).forEach(g=>{if(g.sentAt)return;if(g.deleted){L.push("• Removed "+AREA[g.kind].l.toLowerCase()+" goal: "+g.title);return}
     L.push("• "+AREA[g.kind].l+": "+g.title+(g.target?" — by "+fmt(g.target):"")+(g.status==="completed"?" (completed)":""))});
   return "Goal update from "+(v.first||"")+" "+(v.last||"")+" ("+fmt(today())+")\n"+L.join("\n")}
-async function markSent(){const d=today();Object.values(S.edits.items||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});Object.values(S.edits.goals||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});S.edits.sentAt=d;await saveEdits()}
+async function markSent(){const d=today();Object.values(S.edits.items||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});Object.values(S.edits.goals||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});Object.values(S.edits.mentors||{}).forEach(x=>{if(!x.sentAt)x.sentAt=d});S.edits.sentAt=d;await saveEdits()}
 function doneSheet(){const v=view(),m=message(),who=v.bishop||"the bishop";
   const sms="sms:"+(v.bishopPhone||"")+"?&body="+encodeURIComponent(m);
   const ov=sheet('<h3>Send to '+esc(who)+'</h3><p class="hint">Text or email this to '+esc(who)+'. It lists only what you changed.</p><div class="msg" id="msgbox">'+esc(m)+'</div>'+
