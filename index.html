@@ -232,9 +232,9 @@ async function saveEdits(){try{localStorage.setItem(storeKey(),await sealWith(S.
 /* merged view: base data + youth's edits */
 function view(){const b=S.base,e=S.edits;const v=JSON.parse(JSON.stringify(b));
   const it=e.items||{};
-  ["endowment","melchizedek"].forEach(k=>{if(it[k]){v.ords[k]=Object.assign({},v.ords[k]||{},{status:it[k].target?"goal":(v.ords[k]||{}).status,target:it[k].target,comment:it[k].comment})}});
+  ["endowment","melchizedek"].forEach(k=>{if(it[k]){const bs=(v.ords[k]||{}).status;v.ords[k]=Object.assign({},v.ords[k]||{},{status:bs==="received"?"received":it[k].target?"goal":"",target:it[k].target,comment:it[k].comment})}});
   if(it.sealing){v.ords.sealing=Object.assign({},v.ords.sealing||{},{status:it.sealing.answer==="yes"?"goal":"",answer:it.sealing.answer,comment:it.sealing.comment})}
-  if(it.pb){v.pb=Object.assign({},v.pb||{},{status:it.pb.target?"goal":(v.pb||{}).status,target:it.pb.target,comment:it.pb.comment})}
+  if(it.pb){const bs=(v.pb||{}).status;v.pb=Object.assign({},v.pb||{},{status:bs==="received"?"received":it.pb.target?"goal":"",target:it.pb.target,comment:it.pb.comment})}
   if(it.mission){v.mission=Object.assign({},v.mission||{},it.mission)}
   const gm=Object.assign({},...(b.goals||[]).map(g=>({[g.id]:g})));
   Object.entries(e.goals||{}).forEach(([id,g])=>{if(g.deleted)delete gm[id];else gm[id]=Object.assign({},gm[id]||{id},g)});
@@ -366,10 +366,10 @@ function editItem(k){const v=view();
     const item={comment:text,on:today()};
     if(k==="mission"){if(!ans){toast("Choose Yes or Not yet.");return}item.answer=ans;item.date=date.value||""}
     else if(k==="sealing"){if(!ans){toast("Choose Yes or Not yet.");return}item.answer=ans}
-    else{if(!date.value&&!text){toast("Pick a date or write a line.");return}item.target=date.value||cur.target||""}
+    else{item.target=date.value||"";item.cleared=!item.target&&!text}
     S.edits.items=S.edits.items||{};S.edits.items[k]=item;await saveEdits();ov.remove();render();
     const name={endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"}[k];
-    const sent=await sendToForm([{area:name,date:item.target||item.date||"",comment:item.comment||"",text:k==="sealing"||k==="mission"?(item.answer||""):""}]);
+    const sent=await sendToForm([{area:name,date:item.target||item.date||"",comment:item.comment||"",text:k==="sealing"||k==="mission"?(item.answer||""):(item.cleared?"Cleared":"")}]);
     if(sent){item.sentAt=today();S.edits.sentAt=today();await saveEdits();render();toast("Saved and sent to "+((S.base||{}).bishop||"the bishop")+".",3200)}else toast("Saved on this phone.")});
 }
 function editGoal(id,kind){const v=view();const g=id?(v.goals||[]).find(x=>x.id===id)||{}:{kind};const a=AREA[g.kind||kind];
@@ -399,7 +399,7 @@ function message(){const v=view(),it=S.edits.items||{},gs=S.edits.goals||{};cons
   Object.entries(it).forEach(([k,x])=>{if(x.sentAt)return;let s="• "+name[k]+": ";
     if(k==="sealing")s+=x.answer==="yes"?"yes, my goal":"not yet";
     else if(k==="mission")s+=(x.answer==="yes"?"yes":"not at this time")+(x.date?", planned start "+fmtMY(x.date):"");
-    else s+=x.target?"goal date "+fmtMY(x.target):"no date yet";
+    else s+=x.cleared?"cleared":x.target?"goal date "+fmtMY(x.target):"no date yet";
     if(x.comment)s+='. "'+x.comment+'"';L.push(s)});
   Object.values(gs).forEach(g=>{if(g.sentAt)return;if(g.deleted){L.push("• Removed "+AREA[g.kind].l.toLowerCase()+" goal: "+g.title);return}
     L.push("• "+AREA[g.kind].l+": "+g.title+(g.target?" — by "+fmt(g.target):"")+(g.status==="completed"?" (completed)":""))});
