@@ -36,6 +36,8 @@
 }
 :root.yw{--band:#bb3d62;--band2:#e8909f}
 :root.ym{--band:#2f6685;--band2:#a8874c}
+:root.pr{--band:#3f7d4e;--band2:#a8874c}
+:root.sa{--band:#5b3d7a;--band2:#a8874c}
 *{box-sizing:border-box}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
@@ -236,7 +238,7 @@ async function saveEdits(){try{localStorage.setItem(storeKey(),await sealWith(S.
 /* merged view: base data + youth's edits */
 function view(){const b=S.base,e=S.edits;const v=JSON.parse(JSON.stringify(b));
   const it=e.items||{};
-  ["endowment","melchizedek"].forEach(k=>{if(it[k]){const bs=(v.ords[k]||{}).status;v.ords[k]=Object.assign({},v.ords[k]||{},{status:bs==="received"?"received":it[k].target?"goal":"",target:it[k].target,comment:it[k].comment})}});
+  ["endowment","melchizedek","baptism","confirmation"].forEach(k=>{if(it[k]){const bs=(v.ords[k]||{}).status;v.ords[k]=Object.assign({},v.ords[k]||{},{status:bs==="received"?"received":it[k].target?"goal":"",target:it[k].target,comment:it[k].comment})}});
   if(it.sealing){v.ords.sealing=Object.assign({},v.ords.sealing||{},{status:it.sealing.answer==="yes"?"goal":"",answer:it.sealing.answer,comment:it.sealing.comment})}
   if(it.pb){const bs=(v.pb||{}).status;v.pb=Object.assign({},v.pb||{},{status:bs==="received"?"received":it.pb.target?"goal":"",target:it.pb.target,comment:it.pb.comment})}
   if(it.mission){v.mission=Object.assign({},v.mission||{},it.mission)}
@@ -304,10 +306,10 @@ document.addEventListener("click",e=>{const b=e.target.closest("[data-m]");if(!b
 /* ---------- render ---------- */
 const TEMPLE='<img alt="" width="64" height="62" src="data:image/svg+xml;utf8,'+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="96" height="92" viewBox="170 80 870 1030" fill="none" stroke="#ffffff" stroke-width="18" stroke-linejoin="round" aria-hidden="true"><path d="M192 893 L236 849 L236 1088 L192 1088 Z"/><path d="M275 725 L320 684 L320 1088 L275 1088 Z"/><path d="M360 575 L404 524 L404 1088 L360 1088 Z"/><path d="M445 428 L482 383 L530 102 L582 382 L621 430 L621 1088 L555 1088 L555 983 L509 983 L509 1088 L445 1088 Z"/><path d="M509 492 L533 457 L555 490 L555 667 L509 667 Z"/><path d="M509 725 L555 725 L555 932 L509 932 Z"/><path d="M661 538 L706 580 L706 670 L878 770 L917 498 L941 718 L967 743 L967 798 L1021 827 L1021 1088 L970 1088 L967 895 L957 880 L944 895 L944 1088 L867 1088 L864 860 L848 840 L832 860 L832 1088 L747 1088 L745 817 L729 790 L709 820 L709 1088 L661 1088 Z"/></svg>')+'">';
 function render(){
-  const v=view(),ym=v.org==="YM";document.documentElement.classList.toggle("yw",!ym);document.documentElement.classList.toggle("ym",ym);
+  const v=view(),male=v.org==="YM"||(v.sex==="M"&&v.org!=="YW"),pr=v.org==="PR",ym=male&&!pr,cls={YW:"yw",YM:"ym",PR:"pr",SA:"sa"}[v.org]||"yw";["yw","ym","pr","sa"].forEach(c=>document.documentElement.classList.toggle(c,c===cls));
   const first=v.first||"";
-  const steps=[["baptism","Baptism"],["confirmation","Confirmation"]].concat(ym?[["melchizedek","Melchizedek Priesthood"]]:[]).concat([["endowment","Temple Endowment"],["sealing","Temple Sealing"]]);
-  const editable={melchizedek:1,endowment:1,sealing:1};
+  const steps=[["baptism","Baptism"],["confirmation","Confirmation"]].concat(pr?[]:(ym?[["melchizedek","Melchizedek Priesthood"]]:[]).concat([["endowment","Temple Endowment"],["sealing","Temple Sealing"]]));
+  const editable=pr?{baptism:1,confirmation:1}:{melchizedek:1,endowment:1,sealing:1};
   let path='<div class="path" style="--n:'+steps.length+'">';
   steps.forEach(([k,l],i)=>{const st=(v.ords||{})[k]||{};const got=st.status==="received",goal=st.status==="goal",tmp=k==="endowment"||k==="sealing";
     const can=!!editable[k]&&!got;const tag=can?'button':'div';
@@ -317,18 +319,19 @@ function render(){
     else{l1=goal?"My goal":"";l2=goal?fmtMY(st.target):(can?"Tap to set":"")}
     path+='<'+tag+' class="st'+(can?' tap':'')+(got?' got':goal?' goal':'')+(tmp?' tmp':'')+'"'+(can?' data-edit="'+k+'"':'')+'><span class="dot">'+(got?'✓':i+1)+'</span><span class="sn">'+l+(can&&changed(k)?'<span class="chip">New</span>':'')+'</span><span class="ss">'+(l1?'<b>'+l1+'</b>':'')+esc(l2)+'</span></'+tag+'>'});
   path+='</div>';
-  const quotes=(ym?[["melchizedek","Melchizedek Priesthood goal",((v.ords||{}).melchizedek||{}).comment]]:[]).concat([["endowment","temple endowment goal",((v.ords||{}).endowment||{}).comment],["sealing","temple sealing goal",((v.ords||{}).sealing||{}).comment],["pb","patriarchal blessing goal",(v.pb||{}).comment]])
+  const quotes=(pr?[["baptism","baptism goal",((v.ords||{}).baptism||{}).comment],["confirmation","confirmation goal",((v.ords||{}).confirmation||{}).comment]]:(ym?[["melchizedek","Melchizedek Priesthood goal",((v.ords||{}).melchizedek||{}).comment]]:[]).concat([["endowment","temple endowment goal",((v.ords||{}).endowment||{}).comment],["sealing","temple sealing goal",((v.ords||{}).sealing||{}).comment],["pb","patriarchal blessing goal",(v.pb||{}).comment]]))
     .filter(([k,l,c])=>{const st=k==="pb"?(v.pb||{}):((v.ords||{})[k]||{});if(st.status==="received")return false;const set=k==="sealing"?!!st.answer:k==="pb"?!!st.target:!!st.target;return c||!set})
     .map(([k,l,c])=>'<button class="tap qc'+(c?' has':'')+'" data-edit="'+k+'"><span>'+(c?'About my ':'Set my ')+l+'</span>'+(c?'<em>“'+esc(c)+'”</em>':'')+'</button>').join("");
   const pb=v.pb||{};const pbv=pb.status==="received"?"Received":pb.target?"My goal: "+fmtMY(pb.target):"No goal yet";
   const pbn=pb.status==="received"?"":pb.target?"":"Tap to set a goal date";
   const rec=v.recExp?(v.recExp<today()?["Expired "+fmt(v.recExp),"Schedule a recommend interview"]:["Current through "+fmt(v.recExp),""]):["Not yet",""];
   const mis=v.mission||{};const misv=mis.answer==="yes"?(mis.date?"My goal: "+fmtMY(mis.date):"My goal: serve"):mis.answer==="no"?"Not at this time":"No goal yet";const misn=mis.answer?"":"Tap to answer";
-  const along='<div class="boxes">'+
-    (pb.status==="received"?'<div class="box" style="padding-right:14px"><div class="k">Patriarchal blessing</div><div class="v">Received</div></div>':
+  const recOk=!pr||(v.e12&&v.e12.slice(0,4)<=today().slice(0,4));
+  const along=pr&&!recOk?'':'<div class="boxes">'+
+    (pr?'':pb.status==="received"?'<div class="box" style="padding-right:14px"><div class="k">Patriarchal blessing</div><div class="v">Received</div></div>':
     '<button class="tap box'+(pb.target?' has':'')+'" data-edit="pb"><div class="k">Patriarchal blessing'+(changed("pb")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(pbv)+'</div>'+(pbn?'<div class="n">'+pbn+'</div>':'')+'</button>')+
     '<div class="box" style="padding-right:14px"><div class="k">Temple recommend</div><div class="v">'+esc(rec[0])+'</div>'+(rec[1]?'<div class="n">'+rec[1]+'</div>':'')+'</div>'+
-    '<button class="tap box'+(mis.answer?' has':'')+'" data-edit="mission"><div class="k">Full-time mission'+(changed("mission")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(misv)+'</div>'+(misn?'<div class="n">'+misn+'</div>':'')+'</button>'+
+    (pr?'':'<button class="tap box'+(mis.answer?' has':'')+'" data-edit="mission"><div class="k">Full-time mission'+(changed("mission")?'<span class="chip">New</span>':'')+'</div><div class="v">'+esc(misv)+'</div>'+(misn?'<div class="n">'+misn+'</div>':'')+'</button>')+
     '</div>';
   const areas='<div class="areas">'+AREAS.map(a=>{const gs=(v.goals||[]).filter(g=>g.kind===a.k);
     return '<div class="area" style="--c:var('+a.c+')"><div class="t"><b>'+a.l+'</b><i>'+a.s+'</i></div><ul>'+
@@ -336,10 +339,10 @@ function render(){
       '</ul><button class="add" data-add="'+a.k+'">+ Add a goal</button></div>'}).join("")+'</div>';
   const men=v.mentors;
   const pend=pendingCount();
-  $("#app").innerHTML='<header class="hd"><div class="wrap"><div class="t"><div class="ey">My Covenant Path</div><h1>'+esc((v.first||"")+" "+(v.last||""))+'</h1><div class="sub">'+(ym?"Young Men":"Young Women")+(v.group?' · '+esc(v.group):'')+'</div></div>'+TEMPLE+'</div></header>'+
+  $("#app").innerHTML='<header class="hd"><div class="wrap"><div class="t"><div class="ey">My Covenant Path</div><h1>'+esc((v.first||"")+" "+(v.last||""))+'</h1><div class="sub">'+({YW:"Young Women",YM:"Young Men",PR:"Primary",SA:"Young Single Adults"}[v.org]||"Young Women")+(v.group?' · '+esc(v.group):'')+'</div></div>'+TEMPLE+'</div></header>'+
    '<main class="wrap">'+musicBar()+
    '<section><div class="sh"><h2>My Covenant Path</h2><div class="q">“Every sincere seeker of Jesus Christ will find Him in the temple.”<b>President Nelson</b></div></div>'+path+quotes+'</section>'+
-   '<section><div class="sh"><h2>Along the Way</h2></div>'+along+'</section>'+
+   (along?'<section><div class="sh"><h2>Along the Way</h2></div>'+along+'</section>':'')+
    '<section><div class="sh"><h2>Wisdom and Stature</h2><div class="q">“And Jesus increased in wisdom and stature, and in favour with God and man.”<b>Luke 2:52</b></div></div>'+areas+'</section>'+
    '<section><div class="sh"><h2>My Mentors</h2><div class="q">“Prayerfully select mentors who have your spiritual well-being at heart.”<b>Elder Robert D. Hales</b></div></div><div class="men">'+men.map((m,ix)=>m.name?'<button type="button" class="mb" data-mentor="'+ix+'"><b>'+esc(m.name)+'</b>'+(m.note?'<i>'+esc(m.note)+'</i>':'')+(mchanged(ix)?'<span class="chip">New</span>':'')+'</button>':'<button type="button" class="mb wr" data-mentor="'+ix+'">+ Add a mentor</button>').join("")+'</div></section>'+
    '</main>'+
@@ -356,13 +359,13 @@ const dateF=(id,l,v,min)=>'<label class="f">'+l+'<input type="date" id="'+id+'" 
 const textF=(id,l,v,ph)=>'<label class="f">'+l+'<textarea id="'+id+'" placeholder="'+esc(ph||"")+'">'+esc(v||"")+'</textarea></label>';
 const acts=(save,extra)=>'<div class="acts">'+(extra||"")+'<button class="btn ghost" data-x="cancel">Cancel</button><button class="btn primary" data-x="save">'+(save||"Save")+'</button></div>';
 function editItem(k){const v=view();
-  const T={endowment:["Temple Endowment","When would you like to receive your endowment?","In my own words"],melchizedek:["Melchizedek Priesthood","When would you like to receive the Melchizedek Priesthood?","In my own words"],pb:["Patriarchal Blessing","When would you like to receive your patriarchal blessing?","Why this matters to me"],sealing:["Temple Sealing","Is being sealed in the temple one of your goals?","In my own words"],mission:["Full-Time Mission","Are you planning to serve a full-time mission?","Notes"]}[k];
+  const T={baptism:["Baptism","When would you like to be baptized?","In my own words"],confirmation:["Confirmation","When would you like to be confirmed and receive the gift of the Holy Ghost?","In my own words"],endowment:["Temple Endowment","When would you like to receive your endowment?","In my own words"],melchizedek:["Melchizedek Priesthood","When would you like to receive the Melchizedek Priesthood?","In my own words"],pb:["Patriarchal Blessing","When would you like to receive your patriarchal blessing?","Why this matters to me"],sealing:["Temple Sealing","Is being sealed in the temple one of your goals?","In my own words"],mission:["Full-Time Mission","Are you planning to serve a full-time mission?","Notes"]}[k];
   const cur=k==="pb"?(v.pb||{}):k==="mission"?(v.mission||{}):((v.ords||{})[k]||{});
   const yn=k==="sealing"||k==="mission";
   const ov=sheet('<h3>'+T[0]+'</h3><p class="hint">'+T[1]+'</p>'+
     (yn?'<div class="seg" role="group"><button type="button" data-v="yes" aria-pressed="'+(cur.answer==="yes")+'">Yes</button><button type="button" data-v="no" aria-pressed="'+(cur.answer==="no")+'">Not yet</button></div>':'')+
-    (k==="mission"?dateF("e-date","Planned start (optional)",cur.date):yn?'':dateF("e-date","Goal date",cur.target,((k==="endowment"||k==="melchizedek")&&v.e18&&v.e18>today())?v.e18:today()))+
-    (k==="endowment"&&v.grad?'<p class="note" style="margin-top:-8px">Earliest eligibility: after graduation (June '+esc(v.grad)+')</p>':k==="melchizedek"&&v.e18?'<p class="note" style="margin-top:-8px">Earliest eligibility: '+fmt(v.e18)+' (18th birthday)</p>':'')+
+    (k==="mission"?dateF("e-date","Planned start (optional)",cur.date):yn?'':dateF("e-date","Goal date",cur.target,((k==="endowment"||k==="melchizedek")&&v.e18&&v.e18>today())?v.e18:(k==="baptism"&&v.e8&&v.e8>today())?v.e8:today()))+
+    (k==="endowment"&&v.grad?'<p class="note" style="margin-top:-8px">Earliest eligibility: after graduation (June '+esc(v.grad)+')</p>':k==="melchizedek"&&v.e18?'<p class="note" style="margin-top:-8px">Earliest eligibility: '+fmt(v.e18)+' (18th birthday)</p>':k==="baptism"&&v.e8?'<p class="note" style="margin-top:-8px">Earliest eligibility: '+fmt(v.e8)+' (8th birthday)</p>':'')+
     textF("e-text",T[2],cur.comment,"Write your goal and why it is important to you.")+
     '<p class="note">Prayerfully share your goals with Heavenly Father and ask for His help to accomplish them.</p>'+
     acts());
@@ -376,7 +379,7 @@ function editItem(k){const v=view();
     else if(k==="sealing"){if(!ans){toast("Choose Yes or Not yet.");return}item.answer=ans}
     else{item.target=date.value||"";item.cleared=!item.target&&!text}
     S.edits.items=S.edits.items||{};S.edits.items[k]=item;await saveEdits();ov.remove();render();
-    const name={endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"}[k];
+    const name={baptism:"Baptism",confirmation:"Confirmation",endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"}[k];
     const sent=await sendToForm([{area:name,date:item.target||item.date||"",comment:item.comment||"",text:k==="sealing"||k==="mission"?(item.answer||""):(item.cleared?"Cleared":"")}]);
     if(sent){item.sentAt=today();S.edits.sentAt=today();await saveEdits();render();toast("Saved and sent to "+((S.base||{}).bishop||"the bishop")+".",3200)}else toast("Saved on this phone.")});
 }
@@ -403,7 +406,7 @@ document.addEventListener("click",e=>{
 });
 
 function editMentor(ix){const v=view();const m=v.mentors[ix]||{name:"",note:""};
-  const ov=sheet('<h3>'+(m.name?'Mentor':'Add a mentor')+'</h3><p class="hint">'+(v.org==="YM"?"Which men in the ward do you look up to and connect with?":"Which women in the ward do you look up to and connect with?")+'</p>'+
+  const ov=sheet('<h3>'+(m.name?'Mentor':'Add a mentor')+'</h3><p class="hint">'+((v.org==="YM"||(v.sex==="M"&&v.org!=="YW"))?"Which men in the ward do you look up to and connect with?":"Which women in the ward do you look up to and connect with?")+'</p>'+
     '<label class="f">Name<input type="text" id="m-name" value="'+esc(m.name)+'" placeholder="Their name" autocomplete="off"></label>'+
     '<label class="f">Who they are (optional)<input type="text" id="m-note" value="'+esc(m.note)+'" placeholder="For example: my uncle, a Young Women adviser"></label>'+
     acts("Save",m.name?'<button class="btn ghost left" data-x="del">Remove</button>':''));
@@ -418,7 +421,7 @@ function editMentor(ix){const v=view();const m=v.mentors[ix]||{name:"",note:""};
 
 /* ---------- send to bishop ---------- */
 function message(){const v=view(),it=S.edits.items||{},gs=S.edits.goals||{};const L=[];
-  const name={endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"};
+  const name={baptism:"Baptism",confirmation:"Confirmation",endowment:"Temple Endowment",melchizedek:"Melchizedek Priesthood",pb:"Patriarchal Blessing",sealing:"Temple Sealing",mission:"Full-Time Mission"};
   Object.entries(it).forEach(([k,x])=>{if(x.sentAt)return;let s="• "+name[k]+": ";
     if(k==="sealing")s+=x.answer==="yes"?"yes, my goal":"not yet";
     else if(k==="mission")s+=(x.answer==="yes"?"yes":"not at this time")+(x.date?", planned start "+fmtMY(x.date):"");
